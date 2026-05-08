@@ -4,6 +4,7 @@ import { stations } from "@/content/stations";
 export const TERRAIN_SIZE = 22;
 export const TERRAIN_SEGMENTS = 256;
 export const TERRAIN_HEIGHT = 2.4;
+export const DEFAULT_STATION_ELEVATION_OFFSET = 0.04;
 
 /**
  * Procedural elevation evaluated on the CPU so rover/stations/paths can sit on
@@ -45,11 +46,13 @@ function smoothNoise(x: number, z: number): number {
   const n01 = hash2(xi, zi + 1);
   const n11 = hash2(xi + 1, zi + 1);
   return (
-    n00 * (1 - u) * (1 - v) +
-    n10 * u * (1 - v) +
-    n01 * (1 - u) * v +
-    n11 * u * v
-  ) * 2 - 1;
+    (n00 * (1 - u) * (1 - v) +
+      n10 * u * (1 - v) +
+      n01 * (1 - u) * v +
+      n11 * u * v) *
+      2 -
+    1
+  );
 }
 
 function hash2(x: number, z: number): number {
@@ -83,11 +86,14 @@ export function maxElevationLocal(
 }
 
 /** Map a normalized station position (-1..1) to world coordinates with elevation. */
-export function stationWorldPos(p: [number, number]): THREE.Vector3 {
+export function stationWorldPos(
+  p: [number, number],
+  elevationOffset = DEFAULT_STATION_ELEVATION_OFFSET,
+): THREE.Vector3 {
   const x = p[0] * (TERRAIN_SIZE / 2) * 0.85;
   const z = p[1] * (TERRAIN_SIZE / 2) * 0.85;
   // Use local-max so the station sits above any peak inside its ring footprint
-  const y = maxElevationLocal(x, z, 0.55) + 0.04;
+  const y = maxElevationLocal(x, z, 0.55) + elevationOffset;
   return new THREE.Vector3(x, y, z);
 }
 
@@ -97,7 +103,8 @@ export function parkedWorldPos(stationIndex: number): THREE.Vector3 {
   const px = s.position[0] * (TERRAIN_SIZE / 2) * 0.85 + s.parkOffset[0];
   const pz = s.position[1] * (TERRAIN_SIZE / 2) * 0.85 + s.parkOffset[1];
   // Smaller radius — the rover's footprint is much smaller than a station marker
-  const py = maxElevationLocal(px, pz, 0.18, 1, 6) + 0.02;
+  const py =
+    maxElevationLocal(px, pz, 0.18, 1, 6) + (s.elevationOffset ?? 0.02);
   return new THREE.Vector3(px, py, pz);
 }
 
@@ -134,11 +141,14 @@ export function terrainNormal(x: number, z: number): THREE.Vector3 {
  * to another's. Samples elevation along the (x,z) line and adds a small
  * perpendicular bow so the path doesn't read as a straight line on the map.
  */
-export function buildPath(fromIndex: number, toIndex: number): THREE.CatmullRomCurve3 {
+export function buildPath(
+  fromIndex: number,
+  toIndex: number,
+): THREE.CatmullRomCurve3 {
   const a = parkedWorldPos(fromIndex);
   const b = parkedWorldPos(toIndex);
   // Denser sampling so the smooth curve cannot interpolate below a sharp bump
-  const N = 64;
+  const N = 124;
 
   // Perpendicular in xz plane
   const dx = b.x - a.x;
@@ -180,7 +190,12 @@ export function buildAllPaths(): PathEdge[] {
   for (let i = 0; i < stations.length; i++) {
     for (let j = i + 1; j < stations.length; j++) {
       const curve = buildPath(i, j);
-      edges.push({ fromIndex: i, toIndex: j, curve, length: curve.getLength() });
+      edges.push({
+        fromIndex: i,
+        toIndex: j,
+        curve,
+        length: curve.getLength(),
+      });
     }
   }
   return edges;

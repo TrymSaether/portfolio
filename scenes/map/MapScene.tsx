@@ -3,12 +3,12 @@
 import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Canvas } from "@react-three/fiber";
-import { AdaptiveDpr, AdaptiveEvents, PerformanceMonitor } from "@react-three/drei";
 import {
-  EffectComposer,
-  Bloom,
-  Vignette,
-} from "@react-three/postprocessing";
+  AdaptiveDpr,
+  AdaptiveEvents,
+  PerformanceMonitor,
+} from "@react-three/drei";
+import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import * as THREE from "three";
 import { Terrain } from "./Terrain";
 import { Stations } from "./Stations";
@@ -112,8 +112,16 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
         <AdaptiveEvents />
 
         <hemisphereLight args={["#3a4a78", "#0a0e17", 0.5]} />
-        <directionalLight position={[6, 10, 4]} intensity={1.4} color="#f3c66b" />
-        <directionalLight position={[-8, 4, -6]} intensity={0.4} color="#74c0c8" />
+        <directionalLight
+          position={[6, 10, 4]}
+          intensity={1.4}
+          color="#f3c66b"
+        />
+        <directionalLight
+          position={[-8, 4, -6]}
+          intensity={0.4}
+          color="#74c0c8"
+        />
 
         <CameraRig />
 
@@ -144,11 +152,11 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
 
       {/* Cinematic frame overlay */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--color-ink-200)]/70">
+        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 font-mono text-[10px] uppercase tracking-[0.28em] text-ink-200/70">
           <p>Atlas / sheet 01</p>
-          <p className="mt-1 text-[var(--color-gold-400)]">Trondheim · 63°25′N</p>
+          <p className="mt-1 text-gold-400">Trondheim · 63°25′N 10°24′E</p>
         </div>
-        <div className="absolute top-4 right-4 sm:top-6 sm:right-6 font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--color-ink-200)]/70 text-right">
+        <div className="absolute top-4 right-4 sm:top-6 sm:right-6 font-mono text-[10px] uppercase tracking-[0.28em] text-ink-200/70 text-right">
           <p>{stations.length} stations</p>
           <RoverStatus />
         </div>
@@ -183,7 +191,7 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 32 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="pointer-events-none absolute hidden xl:block top-1/2 -translate-y-1/2 right-6 2xl:right-10 w-[22rem]"
+            className="pointer-events-none absolute hidden xl:block top-1/2 -translate-y-1/2 right-6 2xl:right-10 w-88"
           >
             <StationInfoCard station={station} sceneMode={sceneMode} expanded />
           </motion.div>
@@ -230,22 +238,24 @@ function StationInfoCard({
         >
           {station.glyph} · {station.subtitle}
         </p>
-        <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--muted)]">
+        <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-(--muted)">
           {sceneMode === "parked" ? "click to enter" : "in flight"}
         </p>
       </div>
-      <h3 className="mt-1.5 font-display text-2xl text-[var(--fg)]">
+      <h3 className="mt-1.5 font-display text-2xl text-(--fg)">
         {station.label}
       </h3>
-      <p className="mt-1 text-sm text-[var(--muted)] leading-relaxed">
+      <p className="mt-1 text-sm text-(--muted)ing-relaxed">
         {station.oneLiner}
       </p>
       {expanded && (
         <div
-          className="mt-4 pt-4 border-t border-[var(--line)] flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.18em]"
-          style={{ borderColor: `color-mix(in oklab, ${station.palette.accent} 18%, transparent)` }}
+          className="mt-4 pt-4 border-t border-(--line) items-center justify-between font-mono text-[10px] uppercase tracking-[0.18em]"
+          style={{
+            borderColor: `color-mix(in oklab, ${station.palette.accent} 18%, transparent)`,
+          }}
         >
-          <span className="text-[var(--muted)]">station {station.glyph}</span>
+          <span className="text-(--muted)">station {station.glyph}</span>
           <span style={{ color: station.palette.accent }}>enter →</span>
         </div>
       )}

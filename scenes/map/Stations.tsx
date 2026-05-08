@@ -14,7 +14,12 @@ interface StationsProps {
   onSelect: (id: string) => void;
 }
 
-export function Stations({ active, hovered, onHover, onSelect }: StationsProps) {
+export function Stations({
+  active,
+  hovered,
+  onHover,
+  onSelect,
+}: StationsProps) {
   return (
     <group>
       {stations.map((s) => (
@@ -57,7 +62,10 @@ function StationMarker({
   const beaconRef = useRef<THREE.Mesh>(null);
   const motifRefs = useRef<MotifRefs>({});
 
-  const basePos = useMemo(() => stationWorldPos(station.position), [station.position]);
+  const basePos = useMemo(
+    () => stationWorldPos(station.position, station.elevationOffset),
+    [station.position, station.elevationOffset],
+  );
 
   useFrame((state, dt) => {
     if (!groupRef.current) return;
@@ -92,7 +100,8 @@ function StationMarker({
         notebook: 0.3,
         cabin: 0.0,
       };
-      motifRefs.current.spinner.current.rotation.y += dt * speeds[station.motif];
+      motifRefs.current.spinner.current.rotation.y +=
+        dt * speeds[station.motif];
     }
     if (motifRefs.current.orbiter?.current && station.motif === "crystal") {
       motifRefs.current.orbiter.current.rotation.y -= dt * 0.6;
@@ -114,7 +123,7 @@ function StationMarker({
 
   const motifGeometry = useMotifGeometry(station, motifRefs.current);
 
-  const accent = station.palette.accent;
+  const accent = "#f3c66b"; // station.palette.accent
   const tint = station.palette.tint;
 
   return (
@@ -136,14 +145,23 @@ function StationMarker({
       }}
     >
       {/* Inner glowing ring */}
-      <mesh ref={ringRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, 0]}>
-        <ringGeometry args={[0.34, 0.4, 64]} />
-        <meshBasicMaterial color={accent} transparent opacity={0.95} toneMapped={false} />
+      <mesh
+        ref={ringRef}
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, 0.005, 0]}
+      >
+        <ringGeometry args={[0.34 / 2, 0.4 / 2, 64 / 2]} />
+        <meshBasicMaterial
+          color={accent}
+          transparent
+          opacity={0.95}
+          toneMapped={false}
+        />
       </mesh>
 
       {/* Outer halo */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.004, 0]}>
-        <ringGeometry args={[0.42, 0.78, 64]} />
+        <ringGeometry args={[0.42 / 2, 0.78 / 2, 64 / 2]} />
         <meshBasicMaterial
           color={accent}
           transparent
@@ -154,9 +172,18 @@ function StationMarker({
       </mesh>
 
       {/* Pulse expanding outward */}
-      <mesh ref={pulseRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.0035, 0]}>
-        <ringGeometry args={[0.4, 0.46, 64]} />
-        <meshBasicMaterial color={accent} transparent opacity={0.4} toneMapped={false} />
+      <mesh
+        ref={pulseRef}
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[0, 0.0035, 0]}
+      >
+        <ringGeometry args={[0.4 / 2, 0.46 / 2, 64 / 2]} />
+        <meshBasicMaterial
+          color={accent}
+          transparent
+          opacity={0.4}
+          toneMapped={false}
+        />
       </mesh>
 
       {/* Motif sculpture */}
@@ -165,12 +192,22 @@ function StationMarker({
       {/* Vertical light beam */}
       <mesh position={[0, 1.4, 0]}>
         <cylinderGeometry args={[0.014, 0.022, 2.8, 8]} />
-        <meshBasicMaterial color={accent} transparent opacity={0.22} toneMapped={false} />
+        <meshBasicMaterial
+          color={accent}
+          transparent
+          opacity={0.22}
+          toneMapped={false}
+        />
       </mesh>
       {/* Beam beacon at the top */}
       <mesh ref={beaconRef} position={[0, 2.78, 0]}>
         <sphereGeometry args={[0.05, 16, 16]} />
-        <meshBasicMaterial color={tint} transparent opacity={0.95} toneMapped={false} />
+        <meshBasicMaterial
+          color={tint}
+          transparent
+          opacity={0.95}
+          toneMapped={false}
+        />
       </mesh>
 
       {/* Floating label */}
@@ -242,9 +279,16 @@ function useMotifGeometry(station: Station, refs: MotifRefs) {
               <cylinderGeometry args={[0.1, 0.13, 0.32, 16]} />
             </mesh>
             {/* Rotating dome */}
-            <group ref={(el) => { spinnerRef.current = el; }} position={[0, 0.5, 0]}>
+            <group
+              ref={(el) => {
+                spinnerRef.current = el;
+              }}
+              position={[0, 0.5, 0]}
+            >
               <mesh material={accentMat}>
-                <sphereGeometry args={[0.16, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.55]} />
+                <sphereGeometry
+                  args={[0.16, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.55]}
+                />
               </mesh>
               <mesh material={coolMat} position={[0, 0, 0.16]}>
                 <boxGeometry args={[0.04, 0.16, 0.005]} />
@@ -260,7 +304,11 @@ function useMotifGeometry(station: Station, refs: MotifRefs) {
               <boxGeometry args={[0.36, 0.22, 0.28]} />
             </mesh>
             {/* Roof with accent */}
-            <mesh material={accentMat} position={[0, 0.32, 0]} rotation={[0, Math.PI / 4, 0]}>
+            <mesh
+              material={accentMat}
+              position={[0, 0.32, 0]}
+              rotation={[0, Math.PI / 4, 0]}
+            >
               <coneGeometry args={[0.28, 0.18, 4]} />
             </mesh>
             {/* Window glow */}
@@ -278,7 +326,9 @@ function useMotifGeometry(station: Station, refs: MotifRefs) {
             </mesh>
             {/* Smoke puff (orbiter — drifts upward) */}
             <mesh
-              ref={(el) => { orbiterRef.current = el; }}
+              ref={(el) => {
+                orbiterRef.current = el;
+              }}
               position={[-0.08, 0.5, -0.06]}
             >
               <sphereGeometry args={[0.04, 8, 8]} />
@@ -325,7 +375,12 @@ function useMotifGeometry(station: Station, refs: MotifRefs) {
               <cylinderGeometry args={[0.005, 0.005, 0.2, 6]} />
             </mesh>
             {/* Rotating dish on top */}
-            <group ref={(el) => { spinnerRef.current = el; }} position={[0, 0.9, 0]}>
+            <group
+              ref={(el) => {
+                spinnerRef.current = el;
+              }}
+              position={[0, 0.9, 0]}
+            >
               <mesh material={accentMat} rotation={[Math.PI / 2.5, 0, 0]}>
                 <coneGeometry args={[0.06, 0.04, 16, 1, true]} />
               </mesh>
@@ -342,13 +397,23 @@ function useMotifGeometry(station: Station, refs: MotifRefs) {
               <cylinderGeometry args={[0.22, 0.26, 0.06, 6]} />
             </mesh>
             {/* Big spinning crystal */}
-            <group ref={(el) => { spinnerRef.current = el; }} position={[0, 0.32, 0]}>
+            <group
+              ref={(el) => {
+                spinnerRef.current = el;
+              }}
+              position={[0, 0.32, 0]}
+            >
               <mesh material={accentMat}>
                 <octahedronGeometry args={[0.22, 0]} />
               </mesh>
             </group>
             {/* Orbiting smaller crystals */}
-            <group ref={(el) => { orbiterRef.current = el; }} position={[0, 0.32, 0]}>
+            <group
+              ref={(el) => {
+                orbiterRef.current = el;
+              }}
+              position={[0, 0.32, 0]}
+            >
               <mesh material={tintMat} position={[0.32, 0, 0]}>
                 <octahedronGeometry args={[0.05, 0]} />
               </mesh>
@@ -369,11 +434,19 @@ function useMotifGeometry(station: Station, refs: MotifRefs) {
               <cylinderGeometry args={[0.26, 0.28, 0.06, 32]} />
             </mesh>
             {/* Outer ring */}
-            <mesh material={accentMat} position={[0, 0.085, 0]} rotation={[Math.PI / 2, 0, 0]}>
+            <mesh
+              material={accentMat}
+              position={[0, 0.085, 0]}
+              rotation={[Math.PI / 2, 0, 0]}
+            >
               <torusGeometry args={[0.22, 0.012, 8, 32]} />
             </mesh>
             {/* Inner ring */}
-            <mesh material={tintMat} position={[0, 0.092, 0]} rotation={[Math.PI / 2, 0, 0]}>
+            <mesh
+              material={tintMat}
+              position={[0, 0.092, 0]}
+              rotation={[Math.PI / 2, 0, 0]}
+            >
               <torusGeometry args={[0.13, 0.008, 6, 24]} />
             </mesh>
             {/* Cardinal marks */}
@@ -390,7 +463,12 @@ function useMotifGeometry(station: Station, refs: MotifRefs) {
               );
             })}
             {/* Spinning needle */}
-            <group ref={(el) => { spinnerRef.current = el; }} position={[0, 0.12, 0]}>
+            <group
+              ref={(el) => {
+                spinnerRef.current = el;
+              }}
+              position={[0, 0.12, 0]}
+            >
               <mesh material={accentMat} rotation={[0, 0, 0]}>
                 <coneGeometry args={[0.022, 0.4, 4]} />
               </mesh>
@@ -408,19 +486,30 @@ function useMotifGeometry(station: Station, refs: MotifRefs) {
               <boxGeometry args={[0.42, 0.05, 0.3]} />
             </mesh>
             {/* Open notebook — flapping page on the right */}
-            <mesh material={tintMat} position={[-0.05, 0.07, 0]} rotation={[0, 0, 0.2]}>
+            <mesh
+              material={tintMat}
+              position={[-0.05, 0.07, 0]}
+              rotation={[0, 0, 0.2]}
+            >
               <boxGeometry args={[0.22, 0.01, 0.28]} />
             </mesh>
             <mesh
               material={tintMat}
-              ref={(el) => { orbiterRef.current = el; }}
+              ref={(el) => {
+                orbiterRef.current = el;
+              }}
               position={[0.13, 0.07, 0]}
               rotation={[0, 0, -0.2]}
             >
               <boxGeometry args={[0.22, 0.01, 0.28]} />
             </mesh>
             {/* Spinning quill above */}
-            <group ref={(el) => { spinnerRef.current = el; }} position={[0.18, 0.16, 0.05]}>
+            <group
+              ref={(el) => {
+                spinnerRef.current = el;
+              }}
+              position={[0.18, 0.16, 0.05]}
+            >
               <mesh material={accentMat} rotation={[0, 0, 0.4]}>
                 <cylinderGeometry args={[0.005, 0.008, 0.22, 6]} />
               </mesh>

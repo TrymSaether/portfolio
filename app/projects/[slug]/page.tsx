@@ -35,27 +35,23 @@ export default async function ProjectPage({
     <Section
       kicker={`Project · ${project.domain}`}
       index={project.glyph}
-      title={
-        <>
-          {project.title}
-        </>
-      }
+      title={<>{project.title}</>}
       lede={project.kicker}
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 max-w-5xl">
         <div className="lg:col-span-8 space-y-6">
-          <p className="text-lg text-[var(--color-ink-100)] leading-[1.75]">
+          <p className="text-lg text-ink-100 leading-[1.75]">
             {project.longBlurb}
           </p>
-          <p className="text-base text-[var(--muted)] leading-[1.75] max-w-prose">
+          <p className="text-base text-(--muted) leading-[1.75] max-w-prose">
             More documentation, figures, and a live demo will land here as I
-            extract them from the original notebooks. In the meantime, the
-            short version above is honest about the scope.
+            extract them from the original notebooks. In the meantime, the short
+            version above is honest about the scope.
           </p>
           <div className="pt-4">
             <Link
               href="/projects"
-              className="inline-flex items-center gap-2 text-sm text-[var(--color-gold-400)] hover:text-[var(--color-gold-500)]"
+              className="inline-flex items-center gap-2 text-sm text-gold-400 hover:text-gold-500"
             >
               <span aria-hidden>←</span>
               Back to selected work
@@ -65,20 +61,20 @@ export default async function ProjectPage({
 
         <aside className="lg:col-span-4 space-y-4">
           <div className="glow-card rounded-2xl p-5">
-            <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--muted)]">
+            <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-(--muted)">
               Year
             </p>
             <p className="mt-1 font-display text-2xl">{project.year}</p>
           </div>
           <div className="glow-card rounded-2xl p-5">
-            <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--muted)]">
+            <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-(--muted)">
               Stack
             </p>
             <ul className="mt-3 flex flex-wrap gap-1.5">
               {project.stack.map((t) => (
                 <li
                   key={t}
-                  className="font-mono text-[10px] uppercase tracking-[0.18em] border border-[var(--line)] rounded-full px-2 py-0.5"
+                  className="font-mono text-[10px] uppercase tracking-[0.18em] border border-(--line) rounded-full px-2 py-0.5"
                 >
                   {t}
                 </li>
@@ -86,10 +82,10 @@ export default async function ProjectPage({
             </ul>
           </div>
           <div className="glow-card rounded-2xl p-5">
-            <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--muted)]">
+            <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-(--muted)">
               Status
             </p>
-            <p className="mt-1 font-display text-xl text-[var(--color-gold-400)]">
+            <p className="mt-1 font-display text-xl text-gold-400">
               {project.status}
             </p>
           </div>

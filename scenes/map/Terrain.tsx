@@ -117,8 +117,8 @@ const fragmentShader = /* glsl */ `
     base += uContour * g * (1.0 - smoothstep(0.6, 1.0, r));
 
     // Equation-trail dots near valley
-    float d = dots(vWorldPos.xz * 0.6) * 0.05;
-    base += uGlow * d * (1.0 - smoothstep(0.0, 0.6, r));
+    float d = dots(vWorldPos.xz * 0.2) * 0.05;
+    // base += uGlow * d * (1.0 - smoothstep(0.0, 0.6, r));
 
     // Warm rim near peaks: simulated golden-hour highlight
     float rim = smoothstep(0.65, 0.95, t);
@@ -173,7 +173,9 @@ export function Terrain({
 
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-      <planeGeometry args={[TERRAIN_SIZE, TERRAIN_SIZE, TERRAIN_SEGMENTS, TERRAIN_SEGMENTS]} />
+      <planeGeometry
+        args={[TERRAIN_SIZE, TERRAIN_SIZE, TERRAIN_SEGMENTS, TERRAIN_SEGMENTS]}
+      />
       <shaderMaterial
         ref={matRef}
         uniforms={uniforms}

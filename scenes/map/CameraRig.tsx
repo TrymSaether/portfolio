@@ -25,7 +25,7 @@ export function CameraRig() {
   const { camera } = useThree();
 
   const stationPositions = useMemo(
-    () => stations.map((s) => stationWorldPos(s.position)),
+    () => stations.map((s) => stationWorldPos(s.position, s.elevationOffset)),
     [],
   );
 
