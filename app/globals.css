@@ -1,0 +1,243 @@
+@import "tailwindcss";
+
+@theme {
+  /* Palette — moody nordic night with warm gold accents */
+  --color-ink-950: #07090e;
+  --color-ink-900: #0a0e17;
+  --color-ink-800: #0f1523;
+  --color-ink-700: #161e30;
+  --color-ink-600: #1d273d;
+  --color-ink-500: #2a3651;
+  --color-ink-400: #45567a;
+  --color-ink-300: #6f7fa3;
+  --color-ink-200: #a7b3cd;
+  --color-ink-100: #d6dceb;
+
+  --color-gold-500: #f3c66b;
+  --color-gold-400: #e8b85a;
+  --color-gold-300: #d4a14a;
+  --color-gold-200: #c0893a;
+
+  --color-cream-50: #f6f1e6;
+  --color-cream-100: #ede4d2;
+  --color-cream-200: #ddd0b6;
+
+  --color-aurora: #74c0c8;
+  --color-ember: #d97757;
+
+  /* Typography */
+  --font-display: "Fraunces", "Iowan Old Style", "Apple Garamond", Georgia, serif;
+  --font-sans: "Inter Tight", "Inter", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace;
+
+  /* Spacing scale extension */
+  --spacing-prose: 68ch;
+
+  /* Eased motion */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Fonts via Google CSS — loaded from layout via <link> for simplicity */
+
+:root {
+  color-scheme: dark;
+  --bg: var(--color-ink-950);
+  --fg: var(--color-ink-100);
+  --muted: var(--color-ink-300);
+  --line: color-mix(in oklab, var(--color-ink-400) 40%, transparent);
+  --accent: var(--color-gold-400);
+}
+
+.theme-cream {
+  color-scheme: light;
+  --bg: var(--color-cream-50);
+  --fg: #1c1a14;
+  --muted: #5a5448;
+  --line: rgba(28, 26, 20, 0.14);
+  --accent: #1c1a14;
+}
+
+* {
+  border-color: var(--line);
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11", "calt";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-gold-400);
+  color: var(--color-ink-950);
+}
+
+/* Editorial display utility */
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 30, "WONK" 0;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+
+.font-display-italic {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+}
+
+/* Hairline divider */
+.hairline {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--fg) 20%, transparent),
+    transparent
+  );
+}
+
+.hairline-v {
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in oklab, var(--fg) 20%, transparent),
+    transparent
+  );
+}
+
+/* Aurora glow used in cards */
+.glow-card {
+  background:
+    radial-gradient(
+      120% 120% at 0% 0%,
+      color-mix(in oklab, var(--color-gold-400) 8%, transparent) 0%,
+      transparent 60%
+    ),
+    color-mix(in oklab, var(--color-ink-800) 92%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-ink-400) 35%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.glow-card:hover {
+  border-color: color-mix(in oklab, var(--color-gold-400) 50%, transparent);
+}
+
+/* Topographic backdrop used as a subtle bg pattern */
+.topo-bg {
+  background-image:
+    radial-gradient(1200px 800px at 20% 0%, rgba(243, 198, 107, 0.06), transparent 60%),
+    radial-gradient(900px 600px at 90% 100%, rgba(116, 192, 200, 0.05), transparent 60%),
+    repeating-radial-gradient(
+      circle at 30% 50%,
+      rgba(214, 220, 235, 0.025) 0,
+      rgba(214, 220, 235, 0.025) 1px,
+      transparent 1px,
+      transparent 60px
+    );
+}
+
+/* Page transitions */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up {
+  animation: fade-up 1s var(--ease-out-quint) both;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-gold-400) 18%, transparent),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 4s linear infinite;
+}
+
+/* Hide scrollbar but keep scroll */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Notebook ruled paper texture (used in Notes) */
+.ruled {
+  background-image:
+    linear-gradient(180deg, transparent 31px, rgba(28, 26, 20, 0.08) 32px);
+  background-size: 100% 32px;
+}
+
+/* Blinking caret cursor for headlines */
+.caret::after {
+  content: "";
+  display: inline-block;
+  width: 0.5ch;
+  height: 0.9em;
+  margin-left: 0.15em;
+  background: var(--accent);
+  vertical-align: -0.05em;
+  animation: blink 1.2s steps(2, end) infinite;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Film grain overlay */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.96 0 0 0 0 0.93 0 0 0 0 0.85 0 0 0 0.55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 220px 220px;
+  z-index: 1;
+}
+
+/* Subtle vertical scrim used at scene edges */
+.scrim-bottom::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 35%;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in oklab, var(--color-ink-950) 92%, transparent)
+  );
+  z-index: 1;
+}
+
+@keyframes scroll-cue {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+.scroll-cue { animation: scroll-cue 2.4s ease-in-out infinite; }
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
