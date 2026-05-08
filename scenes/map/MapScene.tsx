@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Canvas } from "@react-three/fiber";
 import { AdaptiveDpr, AdaptiveEvents, PerformanceMonitor } from "@react-three/drei";
@@ -19,13 +19,54 @@ import { Sky } from "./Sky";
 import { CameraRig } from "./CameraRig";
 import { stations } from "@/content/stations";
 import { motion, AnimatePresence } from "motion/react";
+import { useSceneStore } from "./sceneStore";
 
 export function MapScene() {
   const [hovered, setHovered] = useState<string | null>(null);
   const [active, setActive] = useState<string | null>(null);
   const [dpr, setDpr] = useState(1.4);
+  const [flashing, setFlashing] = useState(false);
   const router = useRouter();
+  const sceneMode = useSceneStore((s) => s.mode);
   const station = stations.find((s) => s.id === (hovered ?? active));
+
+  // Reset on unmount (route change)
+  useEffect(() => {
+    return () => useSceneStore.getState().reset();
+  }, []);
+
+  // When the rover arrives, persist the new parked station, run the warm-white
+  // flash, and hand off to the destination route.
+  useEffect(() => {
+    if (sceneMode !== "arriving") return;
+    const targetIndex = useSceneStore.getState().toStationIndex;
+    if (targetIndex === null) return;
+    const target = stations[targetIndex];
+
+    const flashTimer = window.setTimeout(() => setFlashing(true), 380);
+    const navTimer = window.setTimeout(() => {
+      // Park the rover at the destination so on return it's there waiting.
+      useSceneStore.getState().parkAt(targetIndex);
+      router.push(target.href);
+    }, 720);
+
+    return () => {
+      window.clearTimeout(flashTimer);
+      window.clearTimeout(navTimer);
+    };
+  }, [sceneMode, router]);
+
+  const handleStationSelect = (id: string) => {
+    setActive(id);
+    const targetIndex = stations.findIndex((s) => s.id === id);
+    if (targetIndex < 0) return;
+
+    const cur = useSceneStore.getState();
+    if (cur.mode !== "parked") return; // ignore clicks mid-drive
+    if (targetIndex === cur.parkedStationIndex) return; // already there
+
+    cur.beginDrive(targetIndex, performance.now() / 1000);
+  };
 
   return (
     <div className="absolute inset-0">
@@ -75,14 +116,7 @@ export function MapScene() {
             hovered={hovered}
             active={active}
             onHover={setHovered}
-            onSelect={(id) => {
-              setActive(id);
-              const s = stations.find((x) => x.id === id);
-              if (s) {
-                // Tiny delay so the click ring animation is visible
-                setTimeout(() => router.push(s.href), 220);
-              }
-            }}
+            onSelect={handleStationSelect}
           />
           <Rover />
           <Atmosphere />
@@ -101,17 +135,14 @@ export function MapScene() {
 
       {/* Cinematic frame overlay */}
       <div className="pointer-events-none absolute inset-0">
-        {/* Top-left HUD */}
         <div className="absolute top-4 left-4 sm:top-6 sm:left-6 font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--color-ink-200)]/70">
           <p>Atlas / sheet 01</p>
           <p className="mt-1 text-[var(--color-gold-400)]">Trondheim · 63°25′N</p>
         </div>
-        {/* Top-right HUD */}
         <div className="absolute top-4 right-4 sm:top-6 sm:right-6 font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--color-ink-200)]/70 text-right">
           <p>{stations.length} stations</p>
-          <p className="mt-1 text-[var(--color-gold-400)]">rover · drift 1.4 m·s⁻¹</p>
+          <RoverStatus />
         </div>
-        {/* Corner crosshairs */}
         <Crosshair className="top-2 left-2" />
         <Crosshair className="top-2 right-2" rotate={90} />
         <Crosshair className="bottom-2 left-2" rotate={-90} />
@@ -129,13 +160,21 @@ export function MapScene() {
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-6 sm:bottom-10 max-w-md w-[90vw]"
           >
-            <div className="glow-card rounded-2xl px-5 py-4">
+            <div
+              className="glow-card rounded-2xl px-5 py-4"
+              style={{
+                borderColor: `color-mix(in oklab, ${station.palette.accent} 50%, transparent)`,
+              }}
+            >
               <div className="flex items-baseline justify-between gap-3">
-                <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--color-gold-400)]">
+                <p
+                  className="font-mono text-[10px] tracking-[0.28em] uppercase"
+                  style={{ color: station.palette.accent }}
+                >
                   {station.glyph} · {station.subtitle}
                 </p>
                 <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--muted)]">
-                  click to enter
+                  {sceneMode === "parked" ? "click to enter" : "rover en route"}
                 </p>
               </div>
               <h3 className="mt-1.5 font-display text-2xl text-[var(--fg)]">
@@ -148,7 +187,52 @@ export function MapScene() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Warm-white flash overlay — handoff between scene and destination page */}
+      <AnimatePresence>
+        {flashing && (
+          <motion.div
+            key="flash"
+            className="absolute inset-0 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              background:
+                "radial-gradient(closest-side, #fff5d4 0%, #f3c66b 55%, #fff5d4 100%)",
+              mixBlendMode: "screen",
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
+  );
+}
+
+function RoverStatus() {
+  const mode = useSceneStore((s) => s.mode);
+  const parkedIndex = useSceneStore((s) => s.parkedStationIndex);
+  const toIndex = useSceneStore((s) => s.toStationIndex);
+  if (mode === "parked") {
+    const parked = stations[parkedIndex];
+    return (
+      <p
+        className="mt-1"
+        style={{ color: parked.palette.accent }}
+      >
+        rover · parked at {parked.label}
+      </p>
+    );
+  }
+  const target = toIndex !== null ? stations[toIndex] : null;
+  return (
+    <p
+      className="mt-1"
+      style={{ color: target?.palette.accent ?? "var(--color-gold-400)" }}
+    >
+      en route · {target?.label ?? "—"}
+    </p>
   );
 }
 

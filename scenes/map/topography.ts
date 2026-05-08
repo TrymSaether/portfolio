@@ -6,10 +6,10 @@ export const TERRAIN_SEGMENTS = 256;
 export const TERRAIN_HEIGHT = 2.4;
 
 /**
- * Procedural elevation evaluated on the CPU so the rover and station markers
- * can sit on the same surface drawn by the vertex shader.
+ * Procedural elevation evaluated on the CPU so rover/stations/paths can sit on
+ * the same surface drawn by the vertex shader.
  *
- * Mirror of the GLSL `elevation()` in shaders/terrain.frag.glsl — keep in sync.
+ * Mirror of the GLSL `elevation()` in Terrain.tsx — keep in sync.
  */
 export function elevation(x: number, z: number): number {
   const fbm = (px: number, pz: number) => {
@@ -27,10 +27,8 @@ export function elevation(x: number, z: number): number {
   };
 
   const base = fbm(x * 0.18, z * 0.18);
-  // Carve a gentle gaussian valley near origin (math motif: a Gaussian)
   const r2 = x * x + z * z;
   const valley = Math.exp(-r2 * 0.04) * 0.35;
-  // Long ridge along a sine front
   const ridge = Math.sin(x * 0.35 + Math.cos(z * 0.2) * 1.4) * 0.18;
   return (base * 1.1 - valley + ridge) * TERRAIN_HEIGHT * 0.5;
 }
@@ -67,11 +65,125 @@ export function stationWorldPos(p: [number, number]): THREE.Vector3 {
   return new THREE.Vector3(x, y, z);
 }
 
-/** Generate a smooth tour curve through all stations + back to start. */
-export function buildRoverCurve(): THREE.CatmullRomCurve3 {
-  const points = stations.map((s) => stationWorldPos(s.position));
-  // close the loop
-  points.push(points[0].clone());
-  const curve = new THREE.CatmullRomCurve3(points, true, "catmullrom", 0.5);
-  return curve;
+/** World position of the rover's parking spot beside a station. */
+export function parkedWorldPos(stationIndex: number): THREE.Vector3 {
+  const s = stations[stationIndex];
+  const center = stationWorldPos(s.position);
+  return new THREE.Vector3(
+    center.x + s.parkOffset[0],
+    elevation(center.x + s.parkOffset[0], center.z + s.parkOffset[1]),
+    center.z + s.parkOffset[1],
+  );
+}
+
+/**
+ * Outward-facing world-space "look at" target for a parked rover —
+ * the rover should face away from the station center along its parkOffset.
+ */
+export function parkedFacingPoint(stationIndex: number): THREE.Vector3 {
+  const s = stations[stationIndex];
+  const parked = parkedWorldPos(stationIndex);
+  const len = Math.hypot(s.parkOffset[0], s.parkOffset[1]) || 1;
+  const dx = (s.parkOffset[0] / len) * 1.0;
+  const dz = (s.parkOffset[1] / len) * 1.0;
+  return new THREE.Vector3(
+    parked.x + dx,
+    elevation(parked.x + dx, parked.z + dz),
+    parked.z + dz,
+  );
+}
+
+/**
+ * Surface normal of the procedural terrain at (x, z) using a finite-difference
+ * gradient of `elevation`. Returns a unit vector with Y > 0.
+ */
+export function terrainNormal(x: number, z: number): THREE.Vector3 {
+  const eps = 0.08;
+  const dyDx = (elevation(x + eps, z) - elevation(x - eps, z)) / (2 * eps);
+  const dyDz = (elevation(x, z + eps) - elevation(x, z - eps)) / (2 * eps);
+  return new THREE.Vector3(-dyDx, 1, -dyDz).normalize();
+}
+
+/**
+ * Build a terrain-hugging Catmull-Rom path from one station's parking spot
+ * to another's. Samples elevation along the (x,z) line and adds a small
+ * perpendicular bow so the path doesn't read as a straight line on the map.
+ */
+export function buildPath(fromIndex: number, toIndex: number): THREE.CatmullRomCurve3 {
+  const a = parkedWorldPos(fromIndex);
+  const b = parkedWorldPos(toIndex);
+  const N = 24;
+
+  // Perpendicular in xz plane
+  const dx = b.x - a.x;
+  const dz = b.z - a.z;
+  const len = Math.hypot(dx, dz) || 1;
+  const px = -dz / len;
+  const pz = dx / len;
+
+  // Hash the edge to a stable bow magnitude so each path looks distinct
+  const edgeHash =
+    Math.sin(fromIndex * 12.9898 + toIndex * 78.233) * 43758.5453;
+  const bow = ((edgeHash - Math.floor(edgeHash)) * 2 - 1) * 1.4; // -1.4..1.4
+
+  const pts: THREE.Vector3[] = [];
+  for (let i = 0; i <= N; i++) {
+    const u = i / N;
+    // Smooth s-curve weight: 0 at endpoints, 1 in the middle
+    const w = Math.sin(u * Math.PI);
+    const x = a.x + dx * u + px * bow * w;
+    const z = a.z + dz * u + pz * bow * w;
+    const y = elevation(x, z) + 0.085; // hover slightly above the terrain
+    pts.push(new THREE.Vector3(x, y, z));
+  }
+  return new THREE.CatmullRomCurve3(pts, false, "catmullrom", 0.4);
+}
+
+export interface PathEdge {
+  fromIndex: number;
+  toIndex: number;
+  curve: THREE.CatmullRomCurve3;
+  /** Cached length so consumers don't recompute. */
+  length: number;
+}
+
+/** Build the full all-pairs network — one curve per unordered pair. */
+export function buildAllPaths(): PathEdge[] {
+  const edges: PathEdge[] = [];
+  for (let i = 0; i < stations.length; i++) {
+    for (let j = i + 1; j < stations.length; j++) {
+      const curve = buildPath(i, j);
+      edges.push({ fromIndex: i, toIndex: j, curve, length: curve.getLength() });
+    }
+  }
+  return edges;
+}
+
+/** Find an edge in the network for an unordered pair. */
+export function findEdge(
+  edges: PathEdge[],
+  a: number,
+  b: number,
+): PathEdge | null {
+  if (a === b) return null;
+  const lo = Math.min(a, b);
+  const hi = Math.max(a, b);
+  return edges.find((e) => e.fromIndex === lo && e.toIndex === hi) ?? null;
+}
+
+/**
+ * Build a directional curve walking from station `fromIndex` toward `toIndex`,
+ * reusing the cached undirected edge but reversing if necessary.
+ */
+export function directionalCurve(
+  edges: PathEdge[],
+  fromIndex: number,
+  toIndex: number,
+): THREE.CatmullRomCurve3 | null {
+  const edge = findEdge(edges, fromIndex, toIndex);
+  if (!edge) return null;
+  if (edge.fromIndex === fromIndex) return edge.curve;
+  // Reverse: build a fresh curve walking the points in reverse
+  const reversed = [...edge.curve.points].reverse();
+  return new THREE.CatmullRomCurve3(reversed, false, "catmullrom", 0.4);
 }
