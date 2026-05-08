@@ -57,23 +57,48 @@ function hash2(x: number, z: number): number {
   return s - Math.floor(s);
 }
 
+/**
+ * Returns the maximum elevation in a small disc around (x, z). Used to keep
+ * station markers and parked rovers visibly above any nearby terrain peak —
+ * spot-sampling at the centerpoint misses bumps that the noise field can throw
+ * within the marker's footprint.
+ */
+export function maxElevationLocal(
+  x: number,
+  z: number,
+  radius = 0.6,
+  rings = 2,
+  spokes = 8,
+): number {
+  let m = elevation(x, z);
+  for (let r = 1; r <= rings; r++) {
+    const rad = (radius * r) / rings;
+    for (let i = 0; i < spokes; i++) {
+      const a = (i / spokes) * Math.PI * 2 + r * 0.31;
+      const e = elevation(x + Math.cos(a) * rad, z + Math.sin(a) * rad);
+      if (e > m) m = e;
+    }
+  }
+  return m;
+}
+
 /** Map a normalized station position (-1..1) to world coordinates with elevation. */
 export function stationWorldPos(p: [number, number]): THREE.Vector3 {
   const x = p[0] * (TERRAIN_SIZE / 2) * 0.85;
   const z = p[1] * (TERRAIN_SIZE / 2) * 0.85;
-  const y = elevation(x, z);
+  // Use local-max so the station sits above any peak inside its ring footprint
+  const y = maxElevationLocal(x, z, 0.55) + 0.04;
   return new THREE.Vector3(x, y, z);
 }
 
 /** World position of the rover's parking spot beside a station. */
 export function parkedWorldPos(stationIndex: number): THREE.Vector3 {
   const s = stations[stationIndex];
-  const center = stationWorldPos(s.position);
-  return new THREE.Vector3(
-    center.x + s.parkOffset[0],
-    elevation(center.x + s.parkOffset[0], center.z + s.parkOffset[1]),
-    center.z + s.parkOffset[1],
-  );
+  const px = s.position[0] * (TERRAIN_SIZE / 2) * 0.85 + s.parkOffset[0];
+  const pz = s.position[1] * (TERRAIN_SIZE / 2) * 0.85 + s.parkOffset[1];
+  // Smaller radius — the rover's footprint is much smaller than a station marker
+  const py = maxElevationLocal(px, pz, 0.18, 1, 6) + 0.02;
+  return new THREE.Vector3(px, py, pz);
 }
 
 /**
@@ -112,7 +137,8 @@ export function terrainNormal(x: number, z: number): THREE.Vector3 {
 export function buildPath(fromIndex: number, toIndex: number): THREE.CatmullRomCurve3 {
   const a = parkedWorldPos(fromIndex);
   const b = parkedWorldPos(toIndex);
-  const N = 24;
+  // Denser sampling so the smooth curve cannot interpolate below a sharp bump
+  const N = 64;
 
   // Perpendicular in xz plane
   const dx = b.x - a.x;
@@ -133,7 +159,8 @@ export function buildPath(fromIndex: number, toIndex: number): THREE.CatmullRomC
     const w = Math.sin(u * Math.PI);
     const x = a.x + dx * u + px * bow * w;
     const z = a.z + dz * u + pz * bow * w;
-    const y = elevation(x, z) + 0.085; // hover slightly above the terrain
+    // Use local-max with a small radius so the curve stays above neighborhood peaks
+    const y = maxElevationLocal(x, z, 0.16, 1, 6) + 0.13;
     pts.push(new THREE.Vector3(x, y, z));
   }
   return new THREE.CatmullRomCurve3(pts, false, "catmullrom", 0.4);

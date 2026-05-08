@@ -72,7 +72,7 @@ export const stations: Station[] = [
     label: "Notes & Book",
     subtitle: "Field Notebook",
     motif: "notebook",
-    position: [0.34, 0.66],
+    position: [0.40, 0.66],
     parkOffset: [-0.5, 0.25],
     href: "/notes",
     glyph: "III",

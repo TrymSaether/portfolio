@@ -1,0 +1,128 @@
+export const meta = {
+  slug: "why-implicit-methods-feel-magic",
+  title: "Why implicit methods feel like magic",
+};
+
+# Why implicit methods feel like magic
+
+An explicit scheme tells you where to step next. An implicit scheme asks you to
+commit to a place that's _consistent with itself_. The first feels like dead
+reckoning; the second like landing softly. This essay is about why the second
+feels stable when the first falls apart, and what that stability is actually
+buying you.
+
+## A toy problem
+
+Consider the simplest stiff system you can write down — a single linear ODE:
+
+$$
+\frac{du}{dt} = -\lambda\, u, \qquad u(0) = 1
+$$
+
+with $\lambda > 0$. The exact solution is $u(t) = e^{-\lambda t}$. It decays.
+A numerical method's job is to track that decay without making things up.
+
+<Marginalia>
+Stiffness, informally: the time scale of decay is much shorter than the time
+scale you actually want to resolve.
+</Marginalia>
+
+Forward Euler — the most explicit method imaginable — gives you
+
+$$
+u_{n+1} = u_n + \Delta t \cdot (-\lambda u_n) = (1 - \lambda \Delta t)\, u_n.
+$$
+
+For this to decay rather than grow, you need $|1 - \lambda \Delta t| < 1$,
+which means $\Delta t < 2/\lambda$. With $\lambda = 1000$, you're committed
+to $\Delta t < 2\text{ms}$ — even if you only care about the solution at $t = 1$.
+
+## The implicit move
+
+Backward Euler defines $u_{n+1}$ implicitly:
+
+$$
+u_{n+1} = u_n + \Delta t \cdot (-\lambda\, u_{n+1}),
+$$
+
+which solves to
+
+$$
+u_{n+1} = \frac{1}{1 + \lambda \Delta t}\, u_n.
+$$
+
+The amplification factor is now $1 / (1 + \lambda \Delta t)$, which is in
+$(0, 1)$ for **any** positive $\Delta t$. The method is unconditionally
+stable. You can take a one-second step and the answer still decays.
+
+<Pullquote>
+Stability is a discipline of self-consistency, not a discipline of small steps.
+</Pullquote>
+
+## The price
+
+Implicit methods aren't free. At each step you have to **solve** for
+$u_{n+1}$ rather than just compute it. For a linear problem that's a matrix
+solve; for nonlinear it's a Newton iteration. In code:
+
+```ts
+// Forward Euler: just multiply
+const next = current + dt * f(current);
+
+// Backward Euler: solve for the unknown next state
+const next = newton((u) => u - current - dt * f(u), current);
+```
+
+So the trade is: small per-step cost vs. huge step size.
+
+For a stiff system the implicit step's cost is dwarfed by the explicit method's
+need to take ten thousand of them. You buy stability with linear algebra and
+spend it on time.
+
+## When does it feel like magic
+
+Three things have to line up:
+
+1. The system has multiple time scales — there's a fast, decaying piece you
+   don't care about resolving accurately, only stably.
+2. The implicit solve is cheap relative to the resolved-fast cost. For sparse
+   systems with good preconditioners, this is usually true.
+3. You're allowed to lose accuracy on the fast scale. Implicit methods often
+   **damp** rapidly oscillating components — a feature in stiff problems, a
+   bug in wave problems.
+
+<Marginalia>
+This is also why implicit methods get a bad reputation when people apply them
+to wave equations. There's no fast mode to throw away — every mode matters.
+</Marginalia>
+
+## A small experiment
+
+Run this on a long integration window:
+
+```ts
+const lambda = 1000;
+const T = 1.0;
+
+// Explicit: blows up unless dt < 2/lambda
+let u = 1, dt = 0.01;
+for (let t = 0; t < T; t += dt) u += dt * (-lambda * u);
+
+// Implicit: stable for any dt
+let v = 1, h = 0.1;
+for (let t = 0; t < T; t += h) v = v / (1 + h * lambda);
+```
+
+The implicit version with $\Delta t = 0.1$ takes ten steps. The explicit
+version with $\Delta t = 0.01$ would have already overflowed at the first
+step.
+
+## So why does it feel like magic
+
+Because it sounds like cheating. You ask the future to be consistent with
+itself, and the future obliges. There's a beautiful piece of mathematics
+under that — fixed-point iteration, contraction mappings, the implicit
+function theorem — but you can do quite well by holding onto the intuition
+alone:
+
+> An implicit step is a step that's honest about where it ended up.

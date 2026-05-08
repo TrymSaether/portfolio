@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Canvas } from "@react-three/fiber";
 import { AdaptiveDpr, AdaptiveEvents, PerformanceMonitor } from "@react-three/drei";
@@ -21,37 +21,53 @@ import { stations } from "@/content/stations";
 import { motion, AnimatePresence } from "motion/react";
 import { useSceneStore } from "./sceneStore";
 
-export function MapScene() {
+interface MapSceneProps {
+  onHoverStation?: (id: string | null) => void;
+}
+
+export function MapScene({ onHoverStation }: MapSceneProps = {}) {
   const [hovered, setHovered] = useState<string | null>(null);
   const [active, setActive] = useState<string | null>(null);
   const [dpr, setDpr] = useState(1.4);
   const [flashing, setFlashing] = useState(false);
   const router = useRouter();
   const sceneMode = useSceneStore((s) => s.mode);
-  const station = stations.find((s) => s.id === (hovered ?? active));
+
+  // Bridge hover events to parent if requested
+  useEffect(() => {
+    onHoverStation?.(hovered);
+  }, [hovered, onHoverStation]);
 
   // Reset on unmount (route change)
   useEffect(() => {
     return () => useSceneStore.getState().reset();
   }, []);
 
-  // When the rover arrives, persist the new parked station, run the warm-white
-  // flash, and hand off to the destination route.
+  // When the camera flight begins, run the soft-white flash near the end of
+  // the arc and hand off to the destination route at peak flash.
   useEffect(() => {
-    if (sceneMode !== "arriving") return;
+    if (sceneMode !== "flying") return;
     const targetIndex = useSceneStore.getState().toStationIndex;
     if (targetIndex === null) return;
     const target = stations[targetIndex];
+    const flightDuration = useSceneStore.getState().flightDuration;
 
-    const flashTimer = window.setTimeout(() => setFlashing(true), 380);
-    const navTimer = window.setTimeout(() => {
-      // Park the rover at the destination so on return it's there waiting.
-      useSceneStore.getState().parkAt(targetIndex);
-      router.push(target.href);
-    }, 720);
+    // Flash starts at ~70% of the arc so it builds with the zoom
+    const flashStart = window.setTimeout(
+      () => setFlashing(true),
+      flightDuration * 1000 * 0.7,
+    );
+    // Navigate at peak (arc has just landed)
+    const navTimer = window.setTimeout(
+      () => {
+        useSceneStore.getState().parkAt(targetIndex);
+        router.push(target.href);
+      },
+      flightDuration * 1000 + 80,
+    );
 
     return () => {
-      window.clearTimeout(flashTimer);
+      window.clearTimeout(flashStart);
       window.clearTimeout(navTimer);
     };
   }, [sceneMode, router]);
@@ -62,18 +78,20 @@ export function MapScene() {
     if (targetIndex < 0) return;
 
     const cur = useSceneStore.getState();
-    if (cur.mode !== "parked") return; // ignore clicks mid-drive
+    if (cur.mode !== "parked") return; // ignore further clicks mid-flight
     if (targetIndex === cur.parkedStationIndex) return; // already there
 
-    cur.beginDrive(targetIndex, performance.now() / 1000);
+    cur.beginFly(targetIndex, performance.now() / 1000);
   };
+
+  const station = stations.find((s) => s.id === (hovered ?? active));
 
   return (
     <div className="absolute inset-0">
       <Canvas
         shadows={false}
         dpr={dpr}
-        camera={{ position: [9, 7.5, 9], fov: 36, near: 0.1, far: 100 }}
+        camera={{ position: [10, 8, 10], fov: 36, near: 0.1, far: 100 }}
         gl={{
           antialias: true,
           powerPreference: "high-performance",
@@ -93,18 +111,9 @@ export function MapScene() {
         <AdaptiveDpr pixelated />
         <AdaptiveEvents />
 
-        {/* Lighting — cool fill + warm key */}
         <hemisphereLight args={["#3a4a78", "#0a0e17", 0.5]} />
-        <directionalLight
-          position={[6, 10, 4]}
-          intensity={1.4}
-          color="#f3c66b"
-        />
-        <directionalLight
-          position={[-8, 4, -6]}
-          intensity={0.4}
-          color="#74c0c8"
-        />
+        <directionalLight position={[6, 10, 4]} intensity={1.4} color="#f3c66b" />
+        <directionalLight position={[-8, 4, -6]} intensity={0.4} color="#74c0c8" />
 
         <CameraRig />
 
@@ -149,63 +158,97 @@ export function MapScene() {
         <Crosshair className="bottom-2 right-2" rotate={180} />
       </div>
 
-      {/* Station info popover */}
+      {/* Mobile/tablet station info popover (bottom-center, hidden ≥ xl) */}
       <AnimatePresence mode="wait">
         {station && (
           <motion.div
-            key={station.id}
+            key={`bottom-${station.id}`}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-6 sm:bottom-10 max-w-md w-[90vw]"
+            className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-6 sm:bottom-10 max-w-md w-[90vw] xl:hidden"
           >
-            <div
-              className="glow-card rounded-2xl px-5 py-4"
-              style={{
-                borderColor: `color-mix(in oklab, ${station.palette.accent} 50%, transparent)`,
-              }}
-            >
-              <div className="flex items-baseline justify-between gap-3">
-                <p
-                  className="font-mono text-[10px] tracking-[0.28em] uppercase"
-                  style={{ color: station.palette.accent }}
-                >
-                  {station.glyph} · {station.subtitle}
-                </p>
-                <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--muted)]">
-                  {sceneMode === "parked" ? "click to enter" : "rover en route"}
-                </p>
-              </div>
-              <h3 className="mt-1.5 font-display text-2xl text-[var(--fg)]">
-                {station.label}
-              </h3>
-              <p className="mt-1 text-sm text-[var(--muted)] leading-relaxed">
-                {station.oneLiner}
-              </p>
-            </div>
+            <StationInfoCard station={station} sceneMode={sceneMode} />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Warm-white flash overlay — handoff between scene and destination page */}
+      {/* Desktop right-rail hover card (≥ xl) — slides in from the right */}
+      <AnimatePresence mode="wait">
+        {station && (
+          <motion.div
+            key={`right-${station.id}`}
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 32 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="pointer-events-none absolute hidden xl:block top-1/2 -translate-y-1/2 right-6 2xl:right-10 w-[22rem]"
+          >
+            <StationInfoCard station={station} sceneMode={sceneMode} expanded />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Soft white flash overlay — handoff between scene and destination page */}
       <AnimatePresence>
         {flashing && (
           <motion.div
             key="flash"
-            className="absolute inset-0 pointer-events-none"
+            className="absolute inset-0 pointer-events-none bg-white"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={{ opacity: 0.92 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            style={{
-              background:
-                "radial-gradient(closest-side, #fff5d4 0%, #f3c66b 55%, #fff5d4 100%)",
-              mixBlendMode: "screen",
-            }}
+            transition={{ duration: 0.32, ease: [0.4, 0, 0.6, 1] }}
           />
         )}
       </AnimatePresence>
+    </div>
+  );
+}
+
+function StationInfoCard({
+  station,
+  sceneMode,
+  expanded = false,
+}: {
+  station: (typeof stations)[number];
+  sceneMode: "parked" | "flying";
+  expanded?: boolean;
+}) {
+  return (
+    <div
+      className="glow-card rounded-2xl px-5 py-4"
+      style={{
+        borderColor: `color-mix(in oklab, ${station.palette.accent} 50%, transparent)`,
+      }}
+    >
+      <div className="flex items-baseline justify-between gap-3">
+        <p
+          className="font-mono text-[10px] tracking-[0.28em] uppercase"
+          style={{ color: station.palette.accent }}
+        >
+          {station.glyph} · {station.subtitle}
+        </p>
+        <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--muted)]">
+          {sceneMode === "parked" ? "click to enter" : "in flight"}
+        </p>
+      </div>
+      <h3 className="mt-1.5 font-display text-2xl text-[var(--fg)]">
+        {station.label}
+      </h3>
+      <p className="mt-1 text-sm text-[var(--muted)] leading-relaxed">
+        {station.oneLiner}
+      </p>
+      {expanded && (
+        <div
+          className="mt-4 pt-4 border-t border-[var(--line)] flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.18em]"
+          style={{ borderColor: `color-mix(in oklab, ${station.palette.accent} 18%, transparent)` }}
+        >
+          <span className="text-[var(--muted)]">station {station.glyph}</span>
+          <span style={{ color: station.palette.accent }}>enter →</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -217,10 +260,7 @@ function RoverStatus() {
   if (mode === "parked") {
     const parked = stations[parkedIndex];
     return (
-      <p
-        className="mt-1"
-        style={{ color: parked.palette.accent }}
-      >
+      <p className="mt-1" style={{ color: parked.palette.accent }}>
         rover · parked at {parked.label}
       </p>
     );
@@ -231,7 +271,7 @@ function RoverStatus() {
       className="mt-1"
       style={{ color: target?.palette.accent ?? "var(--color-gold-400)" }}
     >
-      en route · {target?.label ?? "—"}
+      flight · {target?.label ?? "—"}
     </p>
   );
 }

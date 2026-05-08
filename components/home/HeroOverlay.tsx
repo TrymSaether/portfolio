@@ -6,8 +6,10 @@ import { motion } from "motion/react";
 export function HeroOverlay() {
   return (
     <div className="pointer-events-none absolute inset-0 grid grid-rows-[1fr_auto] z-10">
-      {/* Headline block — top-left, leaves room for the 3D world */}
-      <div className="px-6 sm:px-10 lg:px-16 pt-28 sm:pt-36 max-w-2xl">
+      {/* Headline rail — wide on small screens, thinner left rail above xl
+          so the 3D world has room to breathe and the right-side hover card
+          has space to land. */}
+      <div className="px-6 sm:px-10 lg:px-16 pt-28 sm:pt-36 max-w-2xl xl:max-w-md 2xl:max-w-lg">
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -21,7 +23,7 @@ export function HeroOverlay() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.55, duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-5 font-display text-balance text-5xl sm:text-7xl lg:text-[88px] leading-[0.98] text-[var(--fg)]"
+          className="mt-5 font-display text-balance text-5xl sm:text-7xl lg:text-[88px] xl:text-[68px] 2xl:text-[80px] leading-[0.98] text-[var(--fg)]"
         >
           Mathematics
           <br />
@@ -34,7 +36,7 @@ export function HeroOverlay() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.85, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-6 max-w-md text-base sm:text-lg text-[var(--color-ink-200)]/85 leading-relaxed"
+          className="mt-6 max-w-md text-base sm:text-lg xl:text-base text-[var(--color-ink-200)]/85 leading-relaxed"
         >
           Trym Sæther — mathematician, engineer, developer. I build simulation
           software, numerical methods, and the writing that makes them legible.

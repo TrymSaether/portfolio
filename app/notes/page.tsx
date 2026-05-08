@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { notes } from "@/content/notes";
@@ -90,44 +91,46 @@ export default function NotesPage() {
           <ol className="lg:col-span-8 space-y-4">
             {notes.map((n, i) => (
               <Reveal as="li" key={n.slug} delay={i * 0.05}>
-                <article
-                  id={n.slug}
-                  className="group glow-card rounded-2xl p-6 hover:translate-y-[-2px] transition-transform duration-500"
-                >
-                  <div className="flex items-center justify-between gap-4">
-                    <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--color-gold-400)]">
-                      {n.kicker}
-                    </p>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">
-                      {n.status === "chapter"
-                        ? "Book chapter"
-                        : n.status === "draft"
-                          ? "Draft"
-                          : n.date}
-                    </p>
-                  </div>
-                  <h3 className="mt-3 font-display text-2xl sm:text-3xl leading-tight">
-                    {n.title}
-                  </h3>
-                  <p className="mt-3 text-base text-[var(--color-ink-200)] leading-relaxed max-w-prose">
-                    {n.excerpt}
-                  </p>
-                  <div className="mt-5 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      {n.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-200)] border border-[var(--line)] rounded-full px-2 py-0.5"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                <Link href={`/notes/${n.slug}`} className="block group">
+                  <article
+                    id={n.slug}
+                    className="glow-card rounded-2xl p-6 group-hover:-translate-y-[2px] transition-transform duration-500"
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--color-gold-400)]">
+                        {n.kicker}
+                      </p>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">
+                        {n.status === "chapter"
+                          ? "Book chapter"
+                          : n.status === "draft"
+                            ? "Draft"
+                            : n.date}
+                      </p>
                     </div>
-                    <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">
-                      {n.reading}
+                    <h3 className="mt-3 font-display text-2xl sm:text-3xl leading-tight">
+                      {n.title}
+                    </h3>
+                    <p className="mt-3 text-base text-[var(--color-ink-200)] leading-relaxed max-w-prose">
+                      {n.excerpt}
                     </p>
-                  </div>
-                </article>
+                    <div className="mt-5 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        {n.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-200)] border border-[var(--line)] rounded-full px-2 py-0.5"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">
+                        {n.reading}
+                      </p>
+                    </div>
+                  </article>
+                </Link>
               </Reveal>
             ))}
           </ol>
