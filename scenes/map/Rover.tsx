@@ -5,17 +5,18 @@ import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { stations } from "@/content/stations";
 import {
+  buildAllPaths,
+  directionalCurve,
   parkedFacingPoint,
   parkedWorldPos,
   terrainNormal,
 } from "./topography";
-import { useSceneStore } from "./sceneStore";
+import { easeInOutCubic, useSceneStore } from "./sceneStore";
 
 /**
- * The rover sits parked at the current parked station. Its only job is
- * presence: idle bob, terrain-aligned up vector, headlight tinted by the
- * station it's parked at. Click-to-fly is handled by the camera; the rover
- * does not drive between stations in this version of the experience.
+ * The rover sits parked at the current station until dispatch. During a
+ * station-to-station handoff it drives along the same terrain-hugging route
+ * line that the map renders, so the camera transition has a visible cause.
  *
  * Model authoring convention: forward = -Z (so the headlight faces -Z). The
  * inner wrapper rotates by π so that the outer group's lookAt — which orients
@@ -39,6 +40,8 @@ export function Rover() {
   const targetHeadlightColor = useRef(new THREE.Color("#fff5d4"));
 
   const tmpTarget = useMemo(() => new THREE.Vector3(), []);
+  const tmpLookAhead = useMemo(() => new THREE.Vector3(), []);
+  const allPaths = useMemo(() => buildAllPaths(), []);
 
   useFrame((_, dt) => {
     if (!groupRef.current) return;
@@ -47,16 +50,45 @@ export function Rover() {
     const stationIndex = store.parkedStationIndex;
 
     const targetPos = parkedWorldPos(stationIndex).clone();
-    targetPos.y += Math.sin(t * 1.4 + stationIndex) * 0.008;
+    let lookTarget = parkedFacingPoint(stationIndex);
+    let wheelSpeed = 0.3;
+    let headlightIntensity = 0.6;
+    let bodyLift = Math.sin(t * 1.4 + stationIndex) * 0.008;
+    let targetColorIndex = stationIndex;
+
+    if (store.mode === "flying" && store.toStationIndex !== null) {
+      const curve = directionalCurve(
+        allPaths,
+        store.parkedStationIndex,
+        store.toStationIndex,
+      );
+
+      if (curve) {
+        const elapsed = performance.now() / 1000 - store.phaseStart;
+        const rawProgress = Math.min(1, elapsed / store.flightDuration);
+        const driveProgress = easeInOutCubic(rawProgress);
+        const lookAheadProgress = Math.min(1, driveProgress + 0.025);
+        const routePos = curve.getPointAt(driveProgress);
+
+        targetPos.copy(routePos);
+        tmpLookAhead.copy(curve.getPointAt(lookAheadProgress));
+        lookTarget = tmpLookAhead;
+        wheelSpeed = 7.5;
+        headlightIntensity = 1.05;
+        bodyLift = Math.sin(t * 18) * 0.014;
+        targetColorIndex = store.toStationIndex;
+      }
+    }
+
+    targetPos.y += bodyLift;
 
     // Smooth station-to-station transitions when parkedStationIndex changes
     if (smoothedPos.current === null) {
       smoothedPos.current = targetPos.clone();
     } else {
-      smoothedPos.current.lerp(targetPos, 1 - Math.exp(-6 * dt));
+      const follow = store.mode === "flying" ? 18 : 6;
+      smoothedPos.current.lerp(targetPos, 1 - Math.exp(-follow * dt));
     }
-
-    const lookTarget = parkedFacingPoint(stationIndex);
 
     // Surface alignment (smoothed)
     const targetUp = terrainNormal(smoothedPos.current.x, smoothedPos.current.z);
@@ -75,8 +107,8 @@ export function Rover() {
     groupRef.current.up.copy(smoothedUp.current);
     groupRef.current.lookAt(tmpTarget);
 
-    // Headlight tint matches whichever station we're parked at
-    targetHeadlightColor.current.set(stations[stationIndex].palette.tint);
+    // Headlight tint warms toward the destination during dispatch.
+    targetHeadlightColor.current.set(stations[targetColorIndex].palette.tint);
     headlightColor.current.lerp(targetHeadlightColor.current, 0.08);
 
     if (headlightRef.current) {
@@ -86,7 +118,7 @@ export function Rover() {
     }
     if (headlightLightRef.current) {
       headlightLightRef.current.color.copy(headlightColor.current);
-      headlightLightRef.current.intensity = 0.6;
+      headlightLightRef.current.intensity = headlightIntensity;
     }
     if (beaconRef.current) {
       const m = beaconRef.current.material as THREE.MeshBasicMaterial;
@@ -95,9 +127,9 @@ export function Rover() {
     if (flagRef.current) {
       flagRef.current.rotation.y = Math.sin(t * 1.8) * 0.22;
     }
-    // Wheels spin gently while parked — like an idling engine
+    // Wheels idle gently when parked and spin quickly during dispatch.
     wheelRefs.current.forEach((w) => {
-      if (w) w.rotation.x += dt * 0.3;
+      if (w) w.rotation.x += dt * wheelSpeed;
     });
   });
 

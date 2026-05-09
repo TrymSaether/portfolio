@@ -50,7 +50,7 @@ interface SceneState {
 const baseState = {
   mode: "parked" as const,
   toStationIndex: null,
-  flightDuration: 1.0,
+  flightDuration: 1.8,
   phaseStart: 0,
 };
 

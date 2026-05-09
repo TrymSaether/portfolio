@@ -59,7 +59,10 @@ export function CameraRig() {
 
       const elapsed = performance.now() / 1000 - store.phaseStart;
       const u = Math.min(1, elapsed / store.flightDuration);
-      const eased = easeInOutCubic(u);
+      // Let the rover visibly dispatch first, then have the camera catch up
+      // on the same arc for a more intentional station handoff.
+      const cameraU = THREE.MathUtils.clamp((u - 0.16) / 0.84, 0, 1);
+      const eased = easeInOutCubic(cameraU);
 
       camera.position.lerpVectors(arcStart.current.pos, targetCamPos, eased);
       const lookAt = arcStart.current.target.clone().lerp(targetLookAt, eased);

@@ -52,10 +52,10 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
     const target = stations[targetIndex];
     const flightDuration = useSceneStore.getState().flightDuration;
 
-    // Flash starts at ~70% of the arc so it builds with the zoom
+    // Flash starts late, after the rover has traced most of the dispatch route.
     const flashStart = window.setTimeout(
       () => setFlashing(true),
-      flightDuration * 1000 * 0.7,
+      flightDuration * 1000 * 0.86,
     );
     // Navigate at peak (arc has just landed)
     const navTimer = window.setTimeout(
@@ -63,7 +63,7 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
         useSceneStore.getState().parkAt(targetIndex);
         router.push(target.href);
       },
-      flightDuration * 1000 + 80,
+      flightDuration * 1000 + 120,
     );
 
     return () => {
@@ -203,12 +203,29 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
         {flashing && (
           <motion.div
             key="flash"
-            className="absolute inset-0 pointer-events-none bg-white"
+            className="absolute inset-0 z-30 pointer-events-none bg-white"
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.92 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.32, ease: [0.4, 0, 0.6, 1] }}
           />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {sceneMode === "flying" && station && (
+          <motion.div
+            key={`dispatch-${station.id}`}
+            className="pointer-events-none absolute left-1/2 top-[18%] z-20 hidden -translate-x-1/2 sm:block"
+            initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: -8, filter: "blur(6px)" }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="rounded-full border border-[color-mix(in_oklab,var(--color-gold-400)_35%,transparent)] bg-[color-mix(in_oklab,var(--color-ink-950)_58%,transparent)] px-4 py-2 font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--color-gold-400)] shadow-[0_0_42px_-18px_var(--color-gold-400)] backdrop-blur-md">
+              dispatching rover · {station.glyph} {station.label}
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

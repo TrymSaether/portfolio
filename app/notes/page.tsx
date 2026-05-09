@@ -19,7 +19,7 @@ export default function NotesPage() {
         title={
           <>
             Working notes
-            <span className="font-display-italic text-[var(--color-gold-400)]">
+            <span className="font-display-italic text-gold-400">
               {" "}
               on a quiet desk.
             </span>
@@ -31,8 +31,8 @@ export default function NotesPage() {
           <aside className="lg:col-span-4">
             <Reveal>
               <div className="glow-card rounded-2xl overflow-hidden">
-                <div className="aspect-[4/5] relative bg-[#1c2236] ruled p-6 text-[#1c1a14]">
-                  <div className="absolute inset-0 ruled bg-[#f6f1e6]" />
+                <div className="aspect-4/5 relative bg-[#1c2236] ruled p-6 text-[#1c1a14]">
+                  <div className="absolute inset-0 ruled bg-cream-50" />
                   <div className="relative z-10 h-full flex flex-col">
                     <p className="font-mono text-[10px] tracking-[0.3em] uppercase opacity-60">
                       Notebook · vol. 04
@@ -48,7 +48,7 @@ export default function NotesPage() {
                         “The implicit step is honest about the future.”
                       </p>
                       <p className="font-mono text-[11px] opacity-70">
-                        sketch · Gauss–Lobatto nodes
+                        sketch · Gauss-Lobatto nodes
                       </p>
                       <svg
                         viewBox="0 0 200 50"
@@ -72,13 +72,13 @@ export default function NotesPage() {
                   </div>
                 </div>
                 <div className="p-5">
-                  <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--muted)]">
+                  <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-(--muted)">
                     The book
                   </p>
                   <h3 className="mt-2 font-display text-xl leading-tight">
                     Mathematics into software
                   </h3>
-                  <p className="mt-2 text-sm text-[var(--muted)] leading-relaxed">
+                  <p className="mt-2 text-sm text-(--muted) leading-relaxed">
                     A long-form treatment of numerical methods for engineers
                     who want their intuition back. Drafting in public — sample
                     chapters land here as they're cleaned up.
@@ -94,13 +94,13 @@ export default function NotesPage() {
                 <Link href={`/notes/${n.slug}`} className="block group">
                   <article
                     id={n.slug}
-                    className="glow-card rounded-2xl p-6 group-hover:-translate-y-[2px] transition-transform duration-500"
+                    className="glow-card rounded-2xl p-6 group-hover:-translate-y-0.5 transition-transform duration-500"
                   >
                     <div className="flex items-center justify-between gap-4">
-                      <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--color-gold-400)]">
+                      <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-gold-400">
                         {n.kicker}
                       </p>
-                      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--muted)">
                         {n.status === "chapter"
                           ? "Book chapter"
                           : n.status === "draft"
@@ -111,7 +111,7 @@ export default function NotesPage() {
                     <h3 className="mt-3 font-display text-2xl sm:text-3xl leading-tight">
                       {n.title}
                     </h3>
-                    <p className="mt-3 text-base text-[var(--color-ink-200)] leading-relaxed max-w-prose">
+                    <p className="mt-3 text-base text-ink-200 leading-relaxed max-w-prose">
                       {n.excerpt}
                     </p>
                     <div className="mt-5 flex items-center justify-between">
@@ -119,13 +119,13 @@ export default function NotesPage() {
                         {n.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-200)] border border-[var(--line)] rounded-full px-2 py-0.5"
+                            className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-200 border border-(--line) rounded-full px-2 py-0.5"
                           >
                             {tag}
                           </span>
                         ))}
                       </div>
-                      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--muted)">
                         {n.reading}
                       </p>
                     </div>
@@ -135,7 +135,7 @@ export default function NotesPage() {
             ))}
           </ol>
         </div>
-      </Section>
+      </Section >
     </>
   );
 }

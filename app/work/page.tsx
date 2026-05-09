@@ -24,7 +24,7 @@ export default function WorkPage() {
         title={
           <>
             From the desk in Bergen to the
-            <span className="font-display-italic text-[var(--color-gold-400)]">
+            <span className="font-display-italic text-gold-400">
               {" "}
               observatory.
             </span>
@@ -32,7 +32,7 @@ export default function WorkPage() {
         }
         lede="A small constellation of years, written as if you could trace it across the map."
       >
-        <ol className="relative pl-6 sm:pl-8 mt-4 border-l border-[var(--line)]">
+        <ol className="relative pl-6 sm:pl-8 mt-4 border-l border-(--line)">
           {timeline.map((t, i) => {
             const meta = kindMeta[t.kind];
             return (
@@ -40,7 +40,7 @@ export default function WorkPage() {
                 <article className="relative py-8 sm:py-10">
                   <span
                     aria-hidden
-                    className="absolute -left-[33px] sm:-left-[37px] top-10 w-3 h-3 rounded-full"
+                    className="absolute -left-8.25m:-left-9.25 top-10 w-3 h-3 rounded-full"
                     style={{
                       background: meta.ring,
                       boxShadow: `0 0 24px ${meta.ring}`,
@@ -48,27 +48,27 @@ export default function WorkPage() {
                   />
                   <span
                     aria-hidden
-                    className="absolute -left-[40px] sm:-left-[44px] top-[36px] w-[18px] h-[18px] rounded-full border opacity-60"
+                    className="absolute -left-10 sm:-left-11 top-9 w-4.5 h-4.5 rounded-full border opacity-60"
                     style={{ borderColor: meta.ring }}
                   />
                   <div className="grid grid-cols-1 sm:grid-cols-12 gap-6">
                     <div className="sm:col-span-3">
-                      <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--muted)]">
+                      <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-(--muted)">
                         {meta.label}
                       </p>
                       <p className="mt-1 font-display text-3xl leading-none">
                         {t.range ?? t.year}
                       </p>
-                      <p className="mt-2 font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--muted)]">
+                      <p className="mt-2 font-mono text-[10px] tracking-[0.18em] uppercase text-(--muted)">
                         {t.location}
                       </p>
                     </div>
                     <div className="sm:col-span-9">
                       <h3 className="font-display text-2xl sm:text-3xl leading-tight">
                         {t.title}{" "}
-                        <span className="text-[var(--muted)]"> — {t.org}</span>
+                        <span className="text-(--muted)"> — {t.org}</span>
                       </h3>
-                      <p className="mt-3 max-w-prose text-base text-[var(--color-ink-200)] leading-relaxed">
+                      <p className="mt-3 max-w-prose text-base text-ink-200 leading-relaxed">
                         {t.body}
                       </p>
                     </div>
@@ -103,13 +103,13 @@ export default function WorkPage() {
           ].map((g) => (
             <Reveal key={g.label}>
               <article className="glow-card rounded-2xl p-6 h-full">
-                <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--color-gold-400)]">
+                <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-gold-400">
                   {g.label}
                 </p>
-                <ul className="mt-4 space-y-2 text-sm text-[var(--color-ink-100)]">
+                <ul className="mt-4 space-y-2 text-sm text-ink-100">
                   {g.items.map((it) => (
                     <li key={it} className="flex items-start gap-2">
-                      <span className="text-[var(--color-gold-400)] mt-1.5 size-1 rounded-full bg-current" />
+                      <span className="text-gold-400 mt-1.5 size-1 rounded-full bg-current" />
                       <span>{it}</span>
                     </li>
                   ))}

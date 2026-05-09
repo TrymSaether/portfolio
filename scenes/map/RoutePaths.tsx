@@ -9,13 +9,13 @@ import {
   findEdge,
   type PathEdge,
 } from "./topography";
-import { useSceneStore } from "./sceneStore";
+import { easeInOutCubic, useSceneStore } from "./sceneStore";
 
 /**
  * Network of every pair-wise path between stations.
  * – Inactive paths render as warm dashed contour-style lines, always visible.
  * – When the camera is flying to a destination, the path between the parked
- *   station and the destination glows with the destination's accent color.
+ *   station and the destination becomes a progressive dispatch stroke.
  */
 export function RoutePaths() {
   const allPaths = useMemo(() => buildAllPaths(), []);
@@ -90,6 +90,7 @@ function ActivePath({ edges }: { edges: PathEdge[] }) {
       uTime: { value: 0 },
       uColor: { value: new THREE.Color("#fff5d4") },
       uIntensity: { value: 0 },
+      uProgress: { value: 0 },
     }),
     [],
   );
@@ -106,6 +107,11 @@ function ActivePath({ edges }: { edges: PathEdge[] }) {
         uniforms.uIntensity.value,
         0,
         0.1,
+      );
+      uniforms.uProgress.value = THREE.MathUtils.lerp(
+        uniforms.uProgress.value,
+        0,
+        0.08,
       );
       groupRef.current.visible = uniforms.uIntensity.value > 0.01;
       return;
@@ -145,6 +151,13 @@ function ActivePath({ edges }: { edges: PathEdge[] }) {
       1,
       0.12,
     );
+    const elapsed = performance.now() / 1000 - store.phaseStart;
+    const progress = easeInOutCubic(Math.min(1, elapsed / store.flightDuration));
+    uniforms.uProgress.value = THREE.MathUtils.lerp(
+      uniforms.uProgress.value,
+      progress,
+      0.22,
+    );
     uniforms.uColor.value.set(stations[toIndex].palette.accent);
   });
 
@@ -168,16 +181,19 @@ function ActivePath({ edges }: { edges: PathEdge[] }) {
             uniform float uTime;
             uniform vec3 uColor;
             uniform float uIntensity;
+            uniform float uProgress;
             varying vec2 vUv;
             void main() {
-              // Fast-moving dashes signal "active route"
-              float dash = step(0.4, fract(vUv.x * 80.0 - uTime * 1.4));
+              float revealed = 1.0 - smoothstep(uProgress, uProgress + 0.045, vUv.x);
+              float wake = smoothstep(uProgress - 0.16, uProgress, vUv.x) *
+                (1.0 - smoothstep(uProgress, uProgress + 0.035, vUv.x));
+              float dash = step(0.42, fract(vUv.x * 78.0 - uTime * 1.9));
               float edge = smoothstep(0.0, 0.18, vUv.y) * smoothstep(1.0, 0.82, vUv.y);
-              // Soft pulse riding from start toward end
-              float head = fract(uTime * 0.6);
-              float pulse = exp(-pow((vUv.x - head) * 8.0, 2.0));
-              float alpha = ((0.55 + dash * 0.35) + pulse * 0.7) * edge * uIntensity;
-              gl_FragColor = vec4(uColor + vec3(pulse) * 0.35, alpha);
+              float head = exp(-pow((vUv.x - uProgress) * 30.0, 2.0));
+              float trail = (0.3 + dash * 0.45 + wake * 0.75) * revealed;
+              float alpha = (trail + head * 1.2) * edge * uIntensity;
+              vec3 color = mix(uColor * 0.65, uColor + vec3(0.35), head + wake * 0.45);
+              gl_FragColor = vec4(color, alpha);
             }
           `}
         />
