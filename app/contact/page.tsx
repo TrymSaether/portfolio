@@ -81,7 +81,7 @@ export default function ContactPage() {
                 </p>
               </a>
               <a
-                href="/cv.pdf"
+                href="/assets/documents/trym-saether-cv-tech-internships.pdf"
                 className="glow-card rounded-2xl p-6 group"
               >
                 <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--muted)]">

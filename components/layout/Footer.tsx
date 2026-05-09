@@ -52,7 +52,10 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <a className="hover:text-[var(--accent)]" href="/cv.pdf">
+              <a
+                className="hover:text-[var(--accent)]"
+                href="/assets/documents/trym-saether-cv-tech-internships.pdf"
+              >
                 Curriculum vitae ↘
               </a>
             </li>

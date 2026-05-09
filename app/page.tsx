@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { MapDispatcher } from "@/components/map/MapDispatcher";
 import { HeroOverlay } from "@/components/home/HeroOverlay";
+import { NoteCard } from "@/components/content/NoteCard";
+import { ProjectCard } from "@/components/content/ProjectCard";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 import { stations } from "@/content/stations";
@@ -64,42 +66,7 @@ export default function HomePage() {
       >
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {projects.slice(0, 3).map((p, i) => (
-            <Reveal key={p.slug} delay={i * 0.06} as="li">
-              <Link
-                href={`/projects/${p.slug}`}
-                className="group block h-full"
-              >
-                <article className="glow-card h-full rounded-2xl p-6">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--muted)]">
-                      {p.kicker}
-                    </span>
-                    <span
-                      aria-hidden
-                      className="font-display text-2xl text-[var(--accent)] leading-none"
-                    >
-                      {p.glyph}
-                    </span>
-                  </div>
-                  <h3 className="mt-3 font-display text-2xl leading-tight">
-                    {p.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-[var(--muted)] leading-relaxed">
-                    {p.blurb}
-                  </p>
-                  <ul className="mt-5 flex flex-wrap gap-1.5">
-                    {p.stack.map((t) => (
-                      <li
-                        key={t}
-                        className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--fg-soft)] border border-[var(--line)] rounded-full px-2 py-0.5"
-                      >
-                        {t}
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              </Link>
-            </Reveal>
+            <ProjectCard key={p.slug} project={p} delay={i * 0.06} />
           ))}
         </ul>
         <div className="mt-10">
@@ -121,32 +88,7 @@ export default function HomePage() {
       >
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {notes.slice(0, 4).map((n, i) => (
-            <Reveal key={n.slug} delay={i * 0.05} as="li">
-              <Link
-                href={`/notes/${n.slug}`}
-                className="group block h-full"
-              >
-                <article className="glow-card h-full rounded-2xl p-6">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--muted)]">
-                      {n.kicker}
-                    </span>
-                    <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent)]">
-                      {n.notation}
-                    </span>
-                  </div>
-                  <h3 className="mt-3 font-display text-2xl leading-tight">
-                    {n.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-[var(--muted)] leading-relaxed">
-                    {n.excerpt}
-                  </p>
-                  <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">
-                    {n.tags.join(" · ")}
-                  </p>
-                </article>
-              </Link>
-            </Reveal>
+            <NoteCard key={n.slug} note={n} delay={i * 0.05} />
           ))}
         </ul>
       </Section>

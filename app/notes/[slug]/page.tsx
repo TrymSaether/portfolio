@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { notes } from "@/content/notes";
+import { getNoteBySlug, notes } from "@/content/notes";
 
 export async function generateStaticParams() {
   return notes.map((n) => ({ slug: n.slug }));
@@ -13,7 +13,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const note = notes.find((n) => n.slug === slug);
+  const note = getNoteBySlug(slug);
   if (!note) return {};
   return {
     title: note.title,
@@ -27,7 +27,7 @@ export default async function NotePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const note = notes.find((n) => n.slug === slug);
+  const note = getNoteBySlug(slug);
   if (!note) notFound();
 
   let MDXBody: React.ComponentType | null = null;

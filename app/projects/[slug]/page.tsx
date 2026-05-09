@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { TagList } from "@/components/content/TagList";
 import { Section } from "@/components/ui/Section";
-import { projects, projectStatusLabels } from "@/content/projects";
+import {
+  getProjectBySlug,
+  projects,
+  projectStatusLabels,
+} from "@/content/projects";
 
 export async function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -14,7 +19,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
+  const project = getProjectBySlug(slug);
   if (!project) return {};
   return {
     title: project.title,
@@ -28,7 +33,7 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
+  const project = getProjectBySlug(slug);
   if (!project) notFound();
 
   return (
@@ -68,16 +73,7 @@ export default async function ProjectPage({
             <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-(--muted)">
               Stack
             </p>
-            <ul className="mt-3 flex flex-wrap gap-1.5">
-              {project.stack.map((t) => (
-                <li
-                  key={t}
-                  className="font-mono text-[10px] uppercase tracking-[0.18em] border border-(--line) rounded-full px-2 py-0.5"
-                >
-                  {t}
-                </li>
-              ))}
-            </ul>
+            <TagList tags={project.stack} className="mt-3" />
           </div>
           <div className="glow-card rounded-2xl p-5">
             <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-(--muted)">

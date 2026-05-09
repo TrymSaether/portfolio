@@ -34,6 +34,10 @@ export const projectStatusLabels: Record<ProjectStatus, string> = {
   writing: "writing",
 };
 
+export function getProjectBySlug(slug: string) {
+  return projects.find((project) => project.slug === slug);
+}
+
 export const projects: Project[] = [
   {
     slug: "afem",

@@ -9,6 +9,10 @@ export interface Note {
   repository?: string;
 }
 
+export function getNoteBySlug(slug: string) {
+  return notes.find((note) => note.slug === slug);
+}
+
 export const notes: Note[] = [
   {
     slug: "numerical-methods",
