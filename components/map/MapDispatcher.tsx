@@ -13,7 +13,7 @@ const MapScene = dynamic(
       <div className="absolute inset-0">
         <TopoSVG />
         <div className="absolute inset-0 grid place-items-center">
-          <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--color-gold-400)] animate-pulse">
+          <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--accent)] animate-pulse">
             Charting terrain…
           </p>
         </div>

@@ -43,10 +43,17 @@ export default function RootLayout({
       className={`${fraunces.variable} ${interTight.variable} ${jetbrains.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='light')document.documentElement.classList.add('theme-cream');}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="topo-bg">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-3 focus:py-2 focus:rounded-md focus:bg-[var(--color-gold-400)] focus:text-[var(--color-ink-950)]"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-3 focus:py-2 focus:rounded-md focus:bg-[var(--accent)] focus:text-[var(--on-accent)]"
         >
           Skip to content
         </a>

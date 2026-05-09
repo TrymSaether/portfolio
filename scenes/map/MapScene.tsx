@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import {
   AdaptiveDpr,
   AdaptiveEvents,
@@ -20,6 +20,7 @@ import { CameraRig } from "./CameraRig";
 import { stations } from "@/content/stations";
 import { motion, AnimatePresence } from "motion/react";
 import { useSceneStore } from "./sceneStore";
+import { useSceneColors, useIsLightTheme } from "@/lib/useThemeColors";
 
 interface MapSceneProps {
   onHoverStation?: (id: string | null) => void;
@@ -32,6 +33,10 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
   const [flashing, setFlashing] = useState(false);
   const router = useRouter();
   const sceneMode = useSceneStore((s) => s.mode);
+  const sceneColors = useSceneColors();
+  const isLight = useIsLightTheme();
+  const sceneBg = sceneColors["--scene-bg"] || "#07090e";
+  const sceneFog = sceneColors["--scene-fog"] || "#0a0e17";
 
   // Bridge hover events to parent if requested
   useEffect(() => {
@@ -100,10 +105,11 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
         onCreated={({ gl, scene }) => {
           gl.toneMapping = THREE.ACESFilmicToneMapping;
           gl.toneMappingExposure = 1.1;
-          scene.fog = new THREE.Fog("#0a0e17", 18, 46);
+          scene.fog = new THREE.Fog(sceneFog, 18, 46);
         }}
       >
-        <color attach="background" args={["#07090e"]} />
+        <color attach="background" args={[sceneBg]} />
+        <SceneFog color={sceneFog} />
         <PerformanceMonitor
           onIncline={() => setDpr(Math.min(2, dpr + 0.2))}
           onDecline={() => setDpr(Math.max(0.9, dpr - 0.2))}
@@ -111,23 +117,35 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
         <AdaptiveDpr pixelated />
         <AdaptiveEvents />
 
-        <hemisphereLight args={["#3a4a78", "#0a0e17", 0.5]} />
+        <hemisphereLight
+          args={[
+            sceneColors["--scene-light-hemi-a"] || "#3a4a78",
+            sceneColors["--scene-light-hemi-b"] || "#0a0e17",
+            isLight ? 0.85 : 0.5,
+          ]}
+        />
         <directionalLight
           position={[6, 10, 4]}
-          intensity={1.4}
-          color="#f3c66b"
+          intensity={isLight ? 1.0 : 1.4}
+          color={sceneColors["--scene-light-key"] || "#f3c66b"}
         />
         <directionalLight
           position={[-8, 4, -6]}
-          intensity={0.4}
-          color="#74c0c8"
+          intensity={isLight ? 0.25 : 0.4}
+          color={sceneColors["--scene-light-fill"] || "#74c0c8"}
         />
 
         <CameraRig />
 
         <Suspense fallback={null}>
-          <Sky />
-          <Terrain />
+          <Sky colors={sceneColors} isLight={isLight} />
+          <Terrain
+            inkLow={sceneColors["--scene-low"] || "#0a0e17"}
+            inkHigh={sceneColors["--scene-high"] || "#2a3651"}
+            contour={sceneColors["--scene-contour"] || "#a7b3cd"}
+            glow={sceneColors["--scene-glow"] || "#f3c66b"}
+            vignette={parseFloat(sceneColors["--scene-vignette"] || "0.45")}
+          />
           <RoutePaths />
           <Stations
             hovered={hovered}
@@ -136,27 +154,27 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
             onSelect={handleStationSelect}
           />
           <Rover />
-          <Atmosphere />
+          <Atmosphere colors={sceneColors} />
         </Suspense>
 
         <EffectComposer multisampling={0} enableNormalPass={false}>
           <Bloom
-            intensity={0.95}
-            luminanceThreshold={0.45}
+            intensity={isLight ? 0.45 : 0.95}
+            luminanceThreshold={isLight ? 0.7 : 0.45}
             luminanceSmoothing={0.4}
             mipmapBlur
           />
-          <Vignette eskil={false} offset={0.15} darkness={0.85} />
+          <Vignette eskil={false} offset={0.15} darkness={isLight ? 0.45 : 0.85} />
         </EffectComposer>
       </Canvas>
 
       {/* Cinematic frame overlay */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 font-mono text-[10px] uppercase tracking-[0.28em] text-ink-200/70">
+        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--muted)]">
           <p>Atlas / sheet 01</p>
-          <p className="mt-1 text-gold-400">Trondheim · 63°25′N 10°24′E</p>
+          <p className="mt-1 text-[var(--accent)]">Trondheim · 63°25′N 10°24′E</p>
         </div>
-        <div className="absolute top-4 right-4 sm:top-6 sm:right-6 font-mono text-[10px] uppercase tracking-[0.28em] text-ink-200/70 text-right">
+        <div className="absolute top-4 right-4 sm:top-6 sm:right-6 font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--muted)] text-right">
           <p>{stations.length} stations</p>
           <RoverStatus />
         </div>
@@ -222,7 +240,7 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
             exit={{ opacity: 0, y: -8, filter: "blur(6px)" }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="rounded-full border border-[color-mix(in_oklab,var(--color-gold-400)_35%,transparent)] bg-[color-mix(in_oklab,var(--color-ink-950)_58%,transparent)] px-4 py-2 font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--color-gold-400)] shadow-[0_0_42px_-18px_var(--color-gold-400)] backdrop-blur-md">
+            <div className="rounded-full border border-[color-mix(in_oklab,var(--accent)_35%,transparent)] bg-[color-mix(in_oklab,var(--bg)_58%,transparent)] px-4 py-2 font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--accent)] shadow-[0_0_42px_-18px_var(--accent)] backdrop-blur-md">
               dispatching rover · {station.glyph} {station.label}
             </div>
           </motion.div>
@@ -255,24 +273,24 @@ function StationInfoCard({
         >
           {station.glyph} · {station.subtitle}
         </p>
-        <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-(--muted)">
+        <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--muted)]">
           {sceneMode === "parked" ? "click to enter" : "in flight"}
         </p>
       </div>
-      <h3 className="mt-1.5 font-display text-2xl text-(--fg)">
+      <h3 className="mt-1.5 font-display text-2xl text-[var(--fg)]">
         {station.label}
       </h3>
-      <p className="mt-1 text-sm text-(--muted)ing-relaxed">
+      <p className="mt-1 text-sm text-[var(--muted)] leading-relaxed">
         {station.oneLiner}
       </p>
       {expanded && (
         <div
-          className="mt-4 pt-4 border-t border-(--line) items-center justify-between font-mono text-[10px] uppercase tracking-[0.18em]"
+          className="mt-4 pt-4 border-t border-[var(--line)] flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.18em]"
           style={{
             borderColor: `color-mix(in oklab, ${station.palette.accent} 18%, transparent)`,
           }}
         >
-          <span className="text-(--muted)">station {station.glyph}</span>
+          <span className="text-[var(--muted)]">station {station.glyph}</span>
           <span style={{ color: station.palette.accent }}>enter →</span>
         </div>
       )}
@@ -296,11 +314,23 @@ function RoverStatus() {
   return (
     <p
       className="mt-1"
-      style={{ color: target?.palette.accent ?? "var(--color-gold-400)" }}
+      style={{ color: target?.palette.accent ?? "var(--accent)" }}
     >
       flight · {target?.label ?? "—"}
     </p>
   );
+}
+
+function SceneFog({ color }: { color: string }) {
+  const { scene } = useThree();
+  useEffect(() => {
+    if (scene.fog && (scene.fog as THREE.Fog).color) {
+      (scene.fog as THREE.Fog).color.set(color);
+    } else {
+      scene.fog = new THREE.Fog(color, 18, 46);
+    }
+  }, [scene, color]);
+  return null;
 }
 
 function Crosshair({
@@ -320,7 +350,7 @@ function Crosshair({
       fill="none"
       stroke="currentColor"
       strokeWidth="1"
-      color="var(--color-gold-400)"
+      color="var(--accent)"
     >
       <path d="M2 2 L2 8" />
       <path d="M2 2 L8 2" />

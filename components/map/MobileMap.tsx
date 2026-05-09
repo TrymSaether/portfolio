@@ -22,11 +22,11 @@ export function MobileMap() {
       </div>
 
       <div className="px-4 pt-28 pb-6">
-        <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--color-gold-400)]">
+        <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--accent)]">
           Atlas · sheet 01
         </p>
         <h1 className="mt-3 font-display text-5xl leading-[1.02] text-balance">
-          Mathematics<br />into <span className="font-display-italic text-[var(--color-gold-400)]">software.</span>
+          Mathematics<br />into <span className="font-display-italic text-[var(--accent)]">software.</span>
         </h1>
         <p className="mt-4 text-[var(--muted)] text-base">
           A small atlas of how a mathematician thinks, what an engineer ships,
@@ -46,19 +46,19 @@ export function MobileMap() {
             <Link href={s.href} className="block">
               <div className="glow-card rounded-2xl p-4 active:scale-[0.99] transition-transform">
                 <div className="flex items-center justify-between">
-                  <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--color-gold-400)]">
+                  <p className="font-mono text-[10px] tracking-[0.28em] uppercase text-[var(--accent)]">
                     {s.glyph} · {s.subtitle}
                   </p>
                   <span
                     aria-hidden
-                    className="text-2xl text-[var(--color-gold-400)] leading-none"
+                    className="text-2xl text-[var(--accent)] leading-none"
                   >
                     {motifSymbols[s.motif]}
                   </span>
                 </div>
                 <h2 className="mt-2 font-display text-2xl">{s.label}</h2>
                 <p className="mt-1 text-sm text-[var(--muted)]">{s.oneLiner}</p>
-                <div className="mt-3 flex items-center gap-2 text-xs text-[var(--color-gold-400)]">
+                <div className="mt-3 flex items-center gap-2 text-xs text-[var(--accent)]">
                   <span>Enter station</span>
                   <span>→</span>
                 </div>

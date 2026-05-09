@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/cn";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const links = [
   { href: "/", label: "Home", glyph: "○" },
@@ -23,7 +24,7 @@ export function Nav() {
         <div className="flex items-center justify-between h-14 sm:h-16">
           <Link
             href="/"
-            className="group flex items-center gap-2 text-(--fg)rhover:text-(--accent)sition-colors"
+            className="group flex items-center gap-2 text-[var(--fg)] hover:text-[var(--accent)] transition-colors"
             aria-label="Trym Sæther — home"
           >
             <span className="font-display text-xl tracking-tight">
@@ -35,7 +36,7 @@ export function Nav() {
           </Link>
 
           <nav className="hidden md:flex items-center">
-            <ul className="flex items-center gap-1 px-1 py-1 rounded-full border border-(--line) backdrop-blur-md bg-[color-mix(in_oklab,var(--color-ink-900)_60%,transparent)]">
+            <ul className="flex items-center gap-1 px-1 py-1 rounded-full border border-[var(--line)] backdrop-blur-md bg-[color-mix(in_oklab,var(--bg-elevated)_70%,transparent)]">
               {links.map((l) => {
                 const active =
                   l.href === "/"
@@ -48,14 +49,14 @@ export function Nav() {
                       className={cn(
                         "relative inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors",
                         active
-                          ? "text-ink-950"
-                          : "text-ink-200 hover:text-gold-400",
+                          ? "text-[var(--on-accent)]"
+                          : "text-[var(--fg-soft)] hover:text-[var(--accent)]",
                       )}
                     >
                       {active && (
                         <span
                           aria-hidden
-                          className="absolute inset-0 z-0 rounded-full bg-gold-400"
+                          className="absolute inset-0 z-0 rounded-full bg-[var(--accent)]"
                         />
                       )}
                       <span className="relative z-10 font-mono text-[10px] opacity-60">
@@ -69,17 +70,20 @@ export function Nav() {
             </ul>
           </nav>
 
-          <Link
-            href="/contact"
-            className="hidden md:inline-flex items-center gap-2 text-sm border border-(--line) rounded-full px-3.5 py-1.5 hover:border-gold-400 hover:text-gold-400 transition-colors"
-          >
-            <span className="size-1.5 rounded-full bg-gold-400 shadow-[0_0_12px_var(--color-gold-400)]" />
-            Available for work
-          </Link>
+          <div className="hidden md:flex items-center gap-2">
+            <ThemeToggle />
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 text-sm border border-[var(--line)] rounded-full px-3.5 py-1.5 hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
+            >
+              <span className="size-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_12px_var(--accent)]" />
+              Available for work
+            </Link>
+          </div>
 
           {/* Mobile glyph row */}
-          <nav className="md:hidden">
-            <ul className="flex items-center gap-0.5 rounded-full border border-(--line) backdrop-blur-md bg-[color-mix(in_oklab,var(--color-ink-900)_60%,transparent)] px-1 py-1">
+          <nav className="md:hidden flex items-center gap-1">
+            <ul className="flex items-center gap-0.5 rounded-full border border-[var(--line)] backdrop-blur-md bg-[color-mix(in_oklab,var(--bg-elevated)_70%,transparent)] px-1 py-1">
               {links.map((l) => {
                 const active =
                   l.href === "/"
@@ -92,7 +96,7 @@ export function Nav() {
                       aria-label={l.label}
                       className={cn(
                         "inline-flex w-7 h-7 items-center justify-center rounded-full text-[10px] font-mono transition-colors",
-                        active ? "bg-gold-400 text-ink-950" : "text-ink-200",
+                        active ? "bg-[var(--accent)] text-[var(--on-accent)]" : "text-[var(--fg-soft)]",
                       )}
                     >
                       {l.glyph}
@@ -101,6 +105,7 @@ export function Nav() {
                 );
               })}
             </ul>
+            <ThemeToggle />
           </nav>
         </div>
       </div>

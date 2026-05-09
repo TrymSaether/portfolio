@@ -3,12 +3,13 @@
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
+import type { SceneColors } from "@/lib/useThemeColors";
 
 /**
  * Drifting particle field, distant fog, and a hovering "moon" disc.
  * Adds the soft cinematic atmosphere without expensive volumetrics.
  */
-export function Atmosphere() {
+export function Atmosphere({ colors }: { colors: SceneColors }) {
   const pointsRef = useRef<THREE.Points>(null);
 
   const { positions, sizes } = useMemo(() => {
@@ -48,7 +49,7 @@ export function Atmosphere() {
           />
         </bufferGeometry>
         <pointsMaterial
-          color="#fff5d4"
+          color={colors["--scene-particle"] || "#fff5d4"}
           size={0.05}
           sizeAttenuation
           transparent

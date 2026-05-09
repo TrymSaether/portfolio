@@ -39,25 +39,124 @@
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-/* Fonts via Google CSS — loaded from layout via <link> for simplicity */
+/* -------------------------------------------------------------------------
+   Semantic theme tokens
+   ------------------------------------------------------------------------- */
 
 :root {
   color-scheme: dark;
+
+  /* Surface */
   --bg: var(--color-ink-950);
+  --bg-elevated: var(--color-ink-900);
+  --surface: color-mix(in oklab, var(--color-ink-800) 92%, transparent);
+  --surface-glow: color-mix(in oklab, var(--color-gold-400) 8%, transparent);
+
+  /* Foreground */
   --fg: var(--color-ink-100);
+  --fg-strong: #ffffff;
+  --fg-soft: var(--color-ink-200);
   --muted: var(--color-ink-300);
   --line: color-mix(in oklab, var(--color-ink-400) 40%, transparent);
+  --line-strong: color-mix(in oklab, var(--color-ink-300) 60%, transparent);
+
+  /* Brand */
   --accent: var(--color-gold-400);
+  --accent-strong: var(--color-gold-500);
+  --accent-soft: var(--color-gold-300);
+  --on-accent: var(--color-ink-950);
+
+  /* Inverted (text/icon over solid bg) */
+  --invert: var(--color-ink-950);
+
+  /* Selection */
+  --selection-bg: var(--color-gold-400);
+  --selection-fg: var(--color-ink-950);
+
+  /* Topographic backdrop layers */
+  --topo-glow-a: rgba(243, 198, 107, 0.06);
+  --topo-glow-b: rgba(116, 192, 200, 0.05);
+  --topo-grid: rgba(214, 220, 235, 0.025);
+
+  /* Map / scene tokens (3D + SVG fallback) */
+  --scene-bg: #07090e;
+  --scene-fog: #0a0e17;
+  --scene-low: #0a0e17;
+  --scene-high: #2a3651;
+  --scene-contour: #a7b3cd;
+  --scene-glow: #f3c66b;
+  --scene-particle: #fff5d4;
+  --scene-star: #f6f1e6;
+  --scene-sky-top: #04060c;
+  --scene-sky-mid: #0d1730;
+  --scene-sky-horizon: #243a5c;
+  --scene-aurora-a: #74c0c8;
+  --scene-aurora-b: #a78bf3;
+  --scene-aurora-opacity: 0.55;
+  --scene-light-key: #f3c66b;
+  --scene-light-fill: #74c0c8;
+  --scene-light-hemi-a: #3a4a78;
+  --scene-light-hemi-b: #0a0e17;
+  --scene-vignette: 0.85;
 }
 
 .theme-cream {
   color-scheme: light;
-  --bg: var(--color-cream-50);
+
+  /* Surface — paper-warm cream */
+  --bg: #f4ece0;
+  --bg-elevated: #ede2cd;
+  --surface: rgba(255, 250, 240, 0.78);
+  --surface-glow: color-mix(in oklab, #c0893a 10%, transparent);
+
+  /* Foreground — graphite ink on paper */
   --fg: #1c1a14;
-  --muted: #5a5448;
+  --fg-strong: #0d0c08;
+  --fg-soft: #3a352a;
+  --muted: #6e6552;
   --line: rgba(28, 26, 20, 0.14);
-  --accent: #1c1a14;
+  --line-strong: rgba(28, 26, 20, 0.28);
+
+  /* Brand — slightly burnished gold reads better on cream */
+  --accent: #b8862a;
+  --accent-strong: #946716;
+  --accent-soft: #c89a3e;
+  --on-accent: #f6f1e6;
+
+  --invert: #f6f1e6;
+
+  --selection-bg: #b8862a;
+  --selection-fg: #f6f1e6;
+
+  --topo-glow-a: rgba(184, 134, 42, 0.07);
+  --topo-glow-b: rgba(116, 144, 152, 0.05);
+  --topo-grid: rgba(28, 26, 20, 0.04);
+
+  /* Map / scene tokens — daylit, soft pastel sky and dune-like terrain */
+  --scene-bg: #efe3cc;
+  --scene-fog: #ead7b3;
+  --scene-low: #d6c498;
+  --scene-high: #f5e6c2;
+  --scene-contour: #6b573a;
+  --scene-glow: #b8862a;
+  --scene-particle: #ffffff;
+  --scene-star: #ffffff;
+  --scene-sky-top: #cfe1f0;
+  --scene-sky-mid: #e7d8b6;
+  --scene-sky-horizon: #f8e9c8;
+  --scene-aurora-a: #c8d9e8;
+  --scene-aurora-b: #ead7b3;
+  --scene-aurora-opacity: 0.18;
+  --scene-light-key: #f7d9a1;
+  --scene-light-fill: #cfe1f0;
+  --scene-light-hemi-a: #f8e9c8;
+  --scene-light-hemi-b: #b29870;
+  --scene-vignette: 0.35;
 }
+
+/* -------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------- */
 
 * {
   border-color: var(--line);
@@ -70,6 +169,8 @@ html, body {
   font-feature-settings: "ss01", "cv11", "calt";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  transition: background-color 320ms var(--ease-out-quint),
+              color 320ms var(--ease-out-quint);
 }
 
 body {
@@ -78,11 +179,14 @@ body {
 }
 
 ::selection {
-  background: var(--color-gold-400);
-  color: var(--color-ink-950);
+  background: var(--selection-bg);
+  color: var(--selection-fg);
 }
 
-/* Editorial display utility */
+/* -------------------------------------------------------------------------
+   Display utilities
+   ------------------------------------------------------------------------- */
+
 .font-display {
   font-family: var(--font-display);
   font-optical-sizing: auto;
@@ -97,7 +201,6 @@ body {
   font-variation-settings: "SOFT" 100, "WONK" 1;
 }
 
-/* Hairline divider */
 .hairline {
   height: 1px;
   background: linear-gradient(
@@ -118,38 +221,53 @@ body {
   );
 }
 
-/* Aurora glow used in cards */
+/* -------------------------------------------------------------------------
+   Surface treatments
+   ------------------------------------------------------------------------- */
+
 .glow-card {
   background:
     radial-gradient(
       120% 120% at 0% 0%,
-      color-mix(in oklab, var(--color-gold-400) 8%, transparent) 0%,
+      var(--surface-glow) 0%,
       transparent 60%
     ),
-    color-mix(in oklab, var(--color-ink-800) 92%, transparent);
-  border: 1px solid color-mix(in oklab, var(--color-ink-400) 35%, transparent);
+    var(--surface);
+  border: 1px solid var(--line);
   backdrop-filter: blur(8px);
+  transition: border-color 280ms var(--ease-out-quint),
+              transform 500ms var(--ease-out-quint),
+              background-color 320ms var(--ease-out-quint);
 }
 
 .glow-card:hover {
-  border-color: color-mix(in oklab, var(--color-gold-400) 50%, transparent);
+  border-color: color-mix(in oklab, var(--accent) 50%, transparent);
+}
+
+.surface-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(8px);
 }
 
 /* Topographic backdrop used as a subtle bg pattern */
 .topo-bg {
   background-image:
-    radial-gradient(1200px 800px at 20% 0%, rgba(243, 198, 107, 0.06), transparent 60%),
-    radial-gradient(900px 600px at 90% 100%, rgba(116, 192, 200, 0.05), transparent 60%),
+    radial-gradient(1200px 800px at 20% 0%, var(--topo-glow-a), transparent 60%),
+    radial-gradient(900px 600px at 90% 100%, var(--topo-glow-b), transparent 60%),
     repeating-radial-gradient(
       circle at 30% 50%,
-      rgba(214, 220, 235, 0.025) 0,
-      rgba(214, 220, 235, 0.025) 1px,
+      var(--topo-grid) 0,
+      var(--topo-grid) 1px,
       transparent 1px,
       transparent 60px
     );
 }
 
-/* Page transitions */
+/* -------------------------------------------------------------------------
+   Animations
+   ------------------------------------------------------------------------- */
+
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
@@ -168,7 +286,7 @@ body {
   background: linear-gradient(
     90deg,
     transparent,
-    color-mix(in oklab, var(--color-gold-400) 18%, transparent),
+    color-mix(in oklab, var(--accent) 18%, transparent),
     transparent
   );
   background-size: 200% 100%;
@@ -182,7 +300,7 @@ body {
 /* Notebook ruled paper texture (used in Notes) */
 .ruled {
   background-image:
-    linear-gradient(180deg, transparent 31px, rgba(28, 26, 20, 0.08) 32px);
+    linear-gradient(180deg, transparent 31px, color-mix(in oklab, var(--fg) 8%, transparent) 32px);
   background-size: 100% 32px;
 }
 
@@ -213,6 +331,11 @@ body {
   z-index: 1;
 }
 
+.theme-cream .grain::after {
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+}
+
 /* Subtle vertical scrim used at scene edges */
 .scrim-bottom::after {
   content: "";
@@ -223,7 +346,7 @@ body {
   background: linear-gradient(
     to bottom,
     transparent,
-    color-mix(in oklab, var(--color-ink-950) 92%, transparent)
+    color-mix(in oklab, var(--bg) 92%, transparent)
   );
   z-index: 1;
 }
@@ -234,7 +357,10 @@ body {
 }
 .scroll-cue { animation: scroll-cue 2.4s ease-in-out infinite; }
 
-/* MDX code-block (rehype-pretty-code via Shiki) */
+/* -------------------------------------------------------------------------
+   MDX code-block (rehype-pretty-code via Shiki)
+   ------------------------------------------------------------------------- */
+
 [data-rehype-pretty-code-figure] pre {
   display: block;
 }
@@ -259,7 +385,7 @@ code[data-line-numbers] > [data-line]::before {
   padding: 0.5rem 1rem 0;
 }
 
-/* KaTeX tweaks for editorial dark theme */
+/* KaTeX tweaks */
 .katex { font-size: 1.05em; color: var(--fg); }
 .katex-display { margin: 1.5rem 0; overflow-x: auto; overflow-y: hidden; }
 

@@ -12,11 +12,11 @@ interface BaseProps {
 
 const styles: Record<Variant, string> = {
   primary:
-    "bg-[var(--color-gold-400)] text-[var(--color-ink-950)] hover:bg-[var(--color-gold-500)] shadow-[0_0_40px_-15px_var(--color-gold-400)]",
+    "bg-[var(--accent)] text-[var(--on-accent)] hover:bg-[var(--accent-strong)] shadow-[0_0_40px_-15px_var(--accent)]",
   ghost:
-    "text-[var(--fg)] hover:text-[var(--color-gold-400)]",
+    "text-[var(--fg)] hover:text-[var(--accent)]",
   outline:
-    "border border-[var(--line)] hover:border-[var(--color-gold-400)] hover:text-[var(--color-gold-400)]",
+    "border border-[var(--line)] hover:border-[var(--accent)] hover:text-[var(--accent)]",
 };
 
 const base =

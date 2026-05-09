@@ -14,7 +14,7 @@ export function HeroOverlay() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="font-mono text-[11px] tracking-[0.32em] uppercase text-[var(--color-gold-400)]"
+          className="font-mono text-[11px] tracking-[0.32em] uppercase text-[var(--accent)]"
         >
           Atlas of a quiet practice — sheet 01
         </motion.p>
@@ -27,7 +27,7 @@ export function HeroOverlay() {
         >
           Mathematics
           <br />
-          <span className="font-display-italic text-[var(--color-gold-400)]">
+          <span className="font-display-italic text-[var(--accent)]">
             into software.
           </span>
         </motion.h1>
@@ -36,7 +36,7 @@ export function HeroOverlay() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.85, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-6 max-w-md text-base sm:text-lg xl:text-base text-[var(--color-ink-200)]/85 leading-relaxed"
+          className="mt-6 max-w-md text-base sm:text-lg xl:text-base text-[var(--fg-soft)]/85 leading-relaxed"
         >
           Trym Sæther — mathematician, engineer, developer. I build simulation
           software, numerical methods, and the writing that makes them legible.
@@ -50,14 +50,14 @@ export function HeroOverlay() {
         >
           <Link
             href="/projects"
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium bg-[var(--color-gold-400)] text-[var(--color-ink-950)] shadow-[0_0_60px_-15px_var(--color-gold-400)] hover:bg-[var(--color-gold-500)] transition-colors"
+            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium bg-[var(--accent)] text-[var(--on-accent)] shadow-[0_0_60px_-15px_var(--accent)] hover:bg-[var(--accent-strong)] transition-colors"
           >
             Selected work
             <span aria-hidden>→</span>
           </Link>
           <Link
             href="/about"
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium border border-[var(--line)] hover:border-[var(--color-gold-400)] hover:text-[var(--color-gold-400)] transition-colors"
+            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium border border-[var(--line)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
           >
             About
           </Link>
@@ -69,11 +69,11 @@ export function HeroOverlay() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.4, duration: 1.2 }}
-        className="relative px-6 sm:px-10 lg:px-16 pb-6 sm:pb-8 flex items-end justify-between font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--color-ink-200)]/55"
+        className="relative px-6 sm:px-10 lg:px-16 pb-6 sm:pb-8 flex items-end justify-between font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--muted)]/80"
       >
         <div>
           <p>scale 1 : non-linear</p>
-          <p className="mt-1 text-[var(--color-gold-400)]">
+          <p className="mt-1 text-[var(--accent)]">
             click a station to enter
           </p>
         </div>
@@ -81,7 +81,7 @@ export function HeroOverlay() {
         {/* Scroll cue, centered */}
         <div
           aria-hidden
-          className="scroll-cue hidden sm:flex absolute left-1/2 -translate-x-1/2 bottom-6 sm:bottom-8 flex-col items-center gap-1.5 text-[var(--color-ink-200)]/70"
+          className="scroll-cue hidden sm:flex absolute left-1/2 -translate-x-1/2 bottom-6 sm:bottom-8 flex-col items-center gap-1.5 text-[var(--muted)]/85"
         >
           <span>scroll</span>
           <svg

@@ -14,18 +14,18 @@ export function TopoSVG({ className = "" }: { className?: string }) {
     >
       <defs>
         <radialGradient id="topo-glow" cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stopColor="rgba(243, 198, 107, 0.25)" />
-          <stop offset="60%" stopColor="rgba(243, 198, 107, 0.05)" />
-          <stop offset="100%" stopColor="rgba(7, 9, 14, 0)" />
+          <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.22" />
+          <stop offset="60%" stopColor="var(--accent)" stopOpacity="0.05" />
+          <stop offset="100%" stopColor="var(--bg)" stopOpacity="0" />
         </radialGradient>
         <radialGradient id="topo-fade" cx="50%" cy="50%" r="60%">
-          <stop offset="60%" stopColor="rgba(7, 9, 14, 0)" />
-          <stop offset="100%" stopColor="rgba(7, 9, 14, 1)" />
+          <stop offset="60%" stopColor="var(--bg)" stopOpacity="0" />
+          <stop offset="100%" stopColor="var(--bg)" stopOpacity="1" />
         </radialGradient>
       </defs>
-      <rect width="800" height="800" fill="#07090e" />
+      <rect width="800" height="800" fill="var(--bg)" />
       <rect width="800" height="800" fill="url(#topo-glow)" />
-      <g stroke="rgba(167, 179, 205, 0.16)" strokeWidth="0.7" fill="none">
+      <g stroke="var(--fg-soft)" strokeOpacity="0.18" strokeWidth="0.7" fill="none">
         {Array.from({ length: 22 }).map((_, i) => {
           const r = 30 + i * 28;
           return (
@@ -40,7 +40,7 @@ export function TopoSVG({ className = "" }: { className?: string }) {
           );
         })}
       </g>
-      <g stroke="rgba(243, 198, 107, 0.4)" strokeWidth="0.8" fill="none">
+      <g stroke="var(--accent)" strokeOpacity="0.45" strokeWidth="0.8" fill="none">
         <path d="M120 600 C 240 500, 360 580, 480 380 S 660 220, 720 180" />
         <path d="M120 700 C 220 620, 340 660, 480 500 S 640 360, 720 320" strokeDasharray="2 4" />
       </g>

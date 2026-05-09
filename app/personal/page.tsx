@@ -50,7 +50,7 @@ export default function PersonalPage() {
         title={
           <>
             Mountains, photographs,
-            <span className="font-display-italic text-[var(--color-gold-400)]">
+            <span className="font-display-italic text-[var(--accent)]">
               {" "}
               and the value of looking around.
             </span>

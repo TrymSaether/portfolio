@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { TERRAIN_SEGMENTS, TERRAIN_SIZE, TERRAIN_HEIGHT } from "./topography";
@@ -70,6 +70,7 @@ const fragmentShader = /* glsl */ `
   uniform vec3  uGlow;
   uniform float uContourSpacing;
   uniform float uSize;
+  uniform float uVignette;
 
   varying vec2  vUv;
   varying float vElevation;
@@ -126,7 +127,7 @@ const fragmentShader = /* glsl */ `
 
     // Distance fog vignette toward edges
     float vignette = smoothstep(1.05, 0.55, r);
-    base *= mix(0.45, 1.0, vignette);
+    base *= mix(uVignette, 1.0, vignette);
 
     // Subtle time-driven shimmer along contour lines
     float shimmer = sin(vElevation * 8.0 - uTime * 0.6) * 0.5 + 0.5;
@@ -141,6 +142,7 @@ interface Props {
   inkHigh?: string;
   contour?: string;
   glow?: string;
+  vignette?: number;
 }
 
 export function Terrain({
@@ -148,6 +150,7 @@ export function Terrain({
   inkHigh = "#2a3651",
   contour = "#a7b3cd",
   glow = "#f3c66b",
+  vignette = 0.45,
 }: Props) {
   const matRef = useRef<THREE.ShaderMaterial>(null);
 
@@ -157,13 +160,25 @@ export function Terrain({
       uHeight: { value: TERRAIN_HEIGHT },
       uSize: { value: TERRAIN_SIZE },
       uContourSpacing: { value: 0.18 },
+      uVignette: { value: vignette },
       uLow: { value: new THREE.Color(inkLow) },
       uHigh: { value: new THREE.Color(inkHigh) },
       uContour: { value: new THREE.Color(contour) },
       uGlow: { value: new THREE.Color(glow) },
     }),
-    [inkLow, inkHigh, contour, glow],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
+
+  useEffect(() => {
+    if (!matRef.current) return;
+    const u = matRef.current.uniforms;
+    u.uLow.value.set(inkLow);
+    u.uHigh.value.set(inkHigh);
+    u.uContour.value.set(contour);
+    u.uGlow.value.set(glow);
+    u.uVignette.value = vignette;
+  }, [inkLow, inkHigh, contour, glow, vignette]);
 
   useFrame((_, dt) => {
     if (matRef.current) {

@@ -24,7 +24,7 @@ export default function WorkPage() {
         title={
           <>
             From the desk in Bergen to the
-            <span className="font-display-italic text-gold-400">
+            <span className="font-display-italic text-[var(--accent)]">
               {" "}
               observatory.
             </span>
@@ -68,7 +68,7 @@ export default function WorkPage() {
                         {t.title}{" "}
                         <span className="text-(--muted)"> — {t.org}</span>
                       </h3>
-                      <p className="mt-3 max-w-prose text-base text-ink-200 leading-relaxed">
+                      <p className="mt-3 max-w-prose text-base text-[var(--fg-soft)] leading-relaxed">
                         {t.body}
                       </p>
                     </div>
@@ -103,13 +103,13 @@ export default function WorkPage() {
           ].map((g) => (
             <Reveal key={g.label}>
               <article className="glow-card rounded-2xl p-6 h-full">
-                <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-gold-400">
+                <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--accent)]">
                   {g.label}
                 </p>
-                <ul className="mt-4 space-y-2 text-sm text-ink-100">
+                <ul className="mt-4 space-y-2 text-sm text-[var(--fg)]">
                   {g.items.map((it) => (
                     <li key={it} className="flex items-start gap-2">
-                      <span className="text-gold-400 mt-1.5 size-1 rounded-full bg-current" />
+                      <span className="text-[var(--accent)] mt-1.5 size-1 rounded-full bg-current" />
                       <span>{it}</span>
                     </li>
                   ))}

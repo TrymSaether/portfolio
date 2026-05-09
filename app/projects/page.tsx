@@ -19,7 +19,7 @@ export default function ProjectsPage() {
         title={
           <>
             Simulators, solvers,
-            <span className="font-display-italic text-[var(--color-gold-400)]">
+            <span className="font-display-italic text-[var(--accent)]">
               {" "}
               and the tools to read them.
             </span>
@@ -60,7 +60,7 @@ export default function ProjectsPage() {
                   </div>
                   <div className="relative">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--color-gold-400)]">
+                      <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--accent)]">
                         {p.domain}
                       </span>
                       <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">
@@ -73,14 +73,14 @@ export default function ProjectsPage() {
                     <p className="mt-1 font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--muted)]">
                       {p.kicker}
                     </p>
-                    <p className="mt-4 text-sm text-[var(--color-ink-200)] leading-relaxed">
+                    <p className="mt-4 text-sm text-[var(--fg-soft)] leading-relaxed">
                       {p.blurb}
                     </p>
                     <ul className="mt-5 flex flex-wrap gap-1.5">
                       {p.stack.map((t) => (
                         <li
                           key={t}
-                          className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-100)] border border-[var(--line)] rounded-full px-2 py-0.5"
+                          className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--fg)] border border-[var(--line)] rounded-full px-2 py-0.5"
                         >
                           {t}
                         </li>
@@ -92,13 +92,13 @@ export default function ProjectsPage() {
                           p.status === "shipped"
                             ? "text-[var(--color-aurora)]"
                             : p.status === "ongoing"
-                              ? "text-[var(--color-gold-400)]"
+                              ? "text-[var(--accent)]"
                               : "text-[var(--color-ember)]"
                         }`}
                       >
                         ● {p.status}
                       </span>
-                      <span className="text-xs text-[var(--color-gold-400)] opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span className="text-xs text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity">
                         Read more →
                       </span>
                     </div>

@@ -42,7 +42,7 @@ export default async function NotePage({
   return (
     <article className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-32 pb-20">
       <header className="mb-12">
-        <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-gold-400">
+        <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[var(--accent)]">
           {note.kicker}
         </p>
         <p className="mt-3 font-mono text-[10px] tracking-[0.18em] uppercase text-(--muted)">
@@ -58,7 +58,7 @@ export default async function NotePage({
       ) : (
         <div className="border border-(--line) rounded-2xl p-8">
           <h1 className="font-display text-4xl leading-tight">{note.title}</h1>
-          <p className="mt-4 text-ink-100">{note.excerpt}</p>
+          <p className="mt-4 text-[var(--fg)]">{note.excerpt}</p>
           <p className="mt-8 font-mono text-[10px] tracking-[0.18em] uppercase text-(--muted)">
             Draft in progress · check back soon.
           </p>
@@ -68,7 +68,7 @@ export default async function NotePage({
       <footer className="mt-16 pt-8 border-t border-(--line) flex items-center justify-between">
         <Link
           href="/notes"
-          className="inline-flex items-center gap-2 text-sm text-gold-400 hover:text-gold-500"
+          className="inline-flex items-center gap-2 text-sm text-[var(--accent)] hover:text-[var(--accent-strong)]"
         >
           <span aria-hidden>←</span>
           All notes

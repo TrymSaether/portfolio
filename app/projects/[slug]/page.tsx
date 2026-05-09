@@ -40,7 +40,7 @@ export default async function ProjectPage({
     >
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 max-w-5xl">
         <div className="lg:col-span-8 space-y-6">
-          <p className="text-lg text-ink-100 leading-[1.75]">
+          <p className="text-lg text-[var(--fg)] leading-[1.75]">
             {project.longBlurb}
           </p>
           <p className="text-base text-(--muted) leading-[1.75] max-w-prose">
@@ -51,7 +51,7 @@ export default async function ProjectPage({
           <div className="pt-4">
             <Link
               href="/projects"
-              className="inline-flex items-center gap-2 text-sm text-gold-400 hover:text-gold-500"
+              className="inline-flex items-center gap-2 text-sm text-[var(--accent)] hover:text-[var(--accent-strong)]"
             >
               <span aria-hidden>←</span>
               Back to selected work
@@ -85,7 +85,7 @@ export default async function ProjectPage({
             <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-(--muted)">
               Status
             </p>
-            <p className="mt-1 font-display text-xl text-gold-400">
+            <p className="mt-1 font-display text-xl text-[var(--accent)]">
               {project.status}
             </p>
           </div>

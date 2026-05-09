@@ -34,7 +34,7 @@ const themes = [
 
 export default function AboutPage() {
   return (
-    <article className="theme-cream bg-[var(--bg)] text-[var(--fg)] -mt-px">
+    <article className="bg-[var(--bg)] text-[var(--fg)] -mt-px">
       <Section
         kicker="Sheet 02 · About"
         index="I"
@@ -51,7 +51,7 @@ export default function AboutPage() {
           <Reveal className="lg:col-span-5 lg:sticky lg:top-28">
             <div className="relative rounded-2xl border border-[var(--line)] overflow-hidden">
               <div className="aspect-[4/5] bg-gradient-to-br from-[#ddd0b6] via-[#c0a875] to-[#7a6a4a] relative">
-                {/* Decorative monogram in lieu of photo */}
+                {/* Decorative monogram in lieu of photo — palette is intentionally constant */}
                 <div className="absolute inset-0 grid place-items-center">
                   <span className="font-display text-[180px] leading-none text-[#1c1a14] opacity-25 select-none">
                     T
@@ -63,8 +63,8 @@ export default function AboutPage() {
                   </p>
                 </div>
               </div>
-              <div className="p-6 bg-[#f6f1e6]">
-                <p className="font-mono text-[10px] tracking-[0.3em] uppercase opacity-60">
+              <div className="p-6 bg-[var(--bg-elevated)] text-[var(--fg)]">
+                <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--muted)]">
                   Currently
                 </p>
                 <ul className="mt-3 space-y-2 text-sm">
@@ -112,7 +112,7 @@ export default function AboutPage() {
             <ol className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {themes.map((t, i) => (
                 <Reveal as="li" key={t.glyph} delay={0.05 + i * 0.04}>
-                  <article className="border border-[var(--line)] rounded-2xl p-6 h-full bg-[#f0e7d5]/40">
+                  <article className="surface-panel rounded-2xl p-6 h-full">
                     <p className="font-mono text-[10px] tracking-[0.3em] uppercase opacity-70">
                       {t.glyph}
                     </p>
@@ -133,7 +133,7 @@ export default function AboutPage() {
                 </p>
                 <Link
                   href="/work"
-                  className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium border border-current hover:bg-[#1c1a14] hover:text-[#f6f1e6] transition-colors"
+                  className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium border border-[var(--line-strong)] hover:bg-[var(--fg)] hover:text-[var(--bg)] transition-colors"
                 >
                   See the timeline
                   <span aria-hidden>→</span>
