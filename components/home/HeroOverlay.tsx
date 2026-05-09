@@ -16,7 +16,7 @@ export function HeroOverlay() {
           transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="font-mono text-[11px] tracking-[0.32em] uppercase text-[var(--accent)]"
         >
-          Atlas of a quiet practice — sheet 01
+          Trym Sæther — sheet 01
         </motion.p>
 
         <motion.h1
@@ -38,8 +38,9 @@ export function HeroOverlay() {
           transition={{ delay: 0.85, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           className="mt-6 max-w-md text-base sm:text-lg xl:text-base text-[var(--fg-soft)]/85 leading-relaxed"
         >
-          Trym Sæther — mathematician, engineer, developer. I build simulation
-          software, numerical methods, and the writing that makes them legible.
+          I work where mathematics becomes software: numerical methods,
+          simulation tools, compiler-adjacent workflows, and technical writing
+          that keeps the reasoning visible.
         </motion.p>
 
         <motion.div

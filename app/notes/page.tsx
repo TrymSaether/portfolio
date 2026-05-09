@@ -7,7 +7,7 @@ import { notes } from "@/content/notes";
 export const metadata: Metadata = {
   title: "Notes & Book",
   description:
-    "Working notes on numerical methods, PDEs, and the slow craft of mathematical writing.",
+    "Notes and book-style writing by Trym Sæther on numerical methods, finite elements, optimization, stochastic modeling, linear algebra, and mathematical communication.",
 };
 
 export default function NotesPage() {
@@ -18,14 +18,14 @@ export default function NotesPage() {
         index="III"
         title={
           <>
-            Working notes
+            A living notebook
             <span className="font-display-italic text-[var(--accent)]">
               {" "}
-              on a quiet desk.
+              for mathematical software.
             </span>
           </>
         }
-        lede="A small collection of essays, half-finished arguments, and chapters from a book in progress on numerical methods for engineers."
+        lede="Course notes, derivations, examples, and book-style drafts that keep the mathematical core visible while moving toward implementation."
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
           <aside className="lg:col-span-4">
@@ -38,17 +38,17 @@ export default function NotesPage() {
                       Notebook · vol. 04
                     </p>
                     <p className="mt-3 font-display text-3xl leading-tight">
-                      Methods for engineers
+                      Notes into software
                     </p>
                     <div className="mt-6 space-y-3 text-sm leading-snug">
                       <p>
                         ∂<sub>t</sub>u + 𝓛 u = f, &nbsp;u(0) = u<sub>0</sub>
                       </p>
                       <p className="opacity-70">
-                        “The implicit step is honest about the future.”
+                        &ldquo;Structure first; implementation second.&rdquo;
                       </p>
                       <p className="font-mono text-[11px] opacity-70">
-                        sketch · Gauss-Lobatto nodes
+                        finite elements · optimization · solvers
                       </p>
                       <svg
                         viewBox="0 0 200 50"
@@ -67,7 +67,7 @@ export default function NotesPage() {
                       </svg>
                     </div>
                     <div className="mt-auto font-mono text-[10px] tracking-[0.3em] uppercase opacity-60">
-                      ch. 06 — in progress
+                      notes · drafts · reports
                     </div>
                   </div>
                 </div>
@@ -79,9 +79,9 @@ export default function NotesPage() {
                     Mathematics into software
                   </h3>
                   <p className="mt-2 text-sm text-(--muted) leading-relaxed">
-                    A long-form treatment of numerical methods for engineers
-                    who want their intuition back. Drafting in public — sample
-                    chapters land here as they're cleaned up.
+                    A set of topic notes and book-style material on numerical
+                    methods, finite elements, optimization, stochastic modeling,
+                    linear algebra, and mathematical communication.
                   </p>
                 </div>
               </div>
@@ -96,16 +96,12 @@ export default function NotesPage() {
                     id={n.slug}
                     className="glow-card rounded-2xl p-6 group-hover:-translate-y-0.5 transition-transform duration-500"
                   >
-                    <div className="flex items-center justify-between gap-4">
+                    <div className="flex flex-wrap items-center justify-between gap-4">
                       <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-(--accent)">
                         {n.kicker}
                       </p>
                       <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--muted)">
-                        {n.status === "chapter"
-                          ? "Book chapter"
-                          : n.status === "draft"
-                            ? "Draft"
-                            : n.date}
+                        {n.notation}
                       </p>
                     </div>
                     <h3 className="mt-3 font-display text-2xl sm:text-3xl leading-tight">
@@ -115,7 +111,7 @@ export default function NotesPage() {
                       {n.excerpt}
                     </p>
                     <div className="mt-5 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         {n.tags.map((tag) => (
                           <span
                             key={tag}
@@ -126,7 +122,7 @@ export default function NotesPage() {
                         ))}
                       </div>
                       <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--muted)">
-                        {n.reading}
+                        {n.repository ? "public notes" : n.status}
                       </p>
                     </div>
                   </article>
@@ -135,7 +131,7 @@ export default function NotesPage() {
             ))}
           </ol>
         </div>
-      </Section >
+      </Section>
     </>
   );
 }

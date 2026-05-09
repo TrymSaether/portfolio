@@ -52,7 +52,8 @@ export const stations: Station[] = [
     parkOffset: [0.55, 0.0],
     href: "/about",
     glyph: "I",
-    oneLiner: "How a mathematician thinks, and how an engineer ships.",
+    oneLiner:
+      "First-principles thinking across mathematics, engineering, and software.",
     palette: stationColors.gold,
   },
   {
@@ -65,7 +66,8 @@ export const stations: Station[] = [
     parkOffset: [0.55, -0.2],
     href: "/work",
     glyph: "II",
-    oneLiner: "Mathematics, physics, and the long road through engineering.",
+    oneLiner:
+      "NTNU mathematics and electrical engineering, plus simulation software at Infineon.",
     palette: stationColors.gold,
   },
   {
@@ -79,7 +81,8 @@ export const stations: Station[] = [
     elevationOffset: 0.52,
     href: "/notes",
     glyph: "III",
-    oneLiner: "Working notes on numerical methods, PDEs, and clear writing.",
+    oneLiner:
+      "Notes on numerical methods, finite elements, optimization, and clear mathematical writing.",
     palette: stationColors.gold,
   },
   {
@@ -92,7 +95,8 @@ export const stations: Station[] = [
     parkOffset: [-0.45, 0.45],
     href: "/projects",
     glyph: "IV",
-    oneLiner: "Simulators, solvers, and tools that turn theory into pixels.",
+    oneLiner:
+      "AFEM, VAMSC, ForDAE, particle transport, and other technical artifacts.",
     palette: stationColors.gold,
   },
   {
@@ -105,7 +109,8 @@ export const stations: Station[] = [
     parkOffset: [0.55, 0.1],
     href: "/personal",
     glyph: "V",
-    oneLiner: "Mountains, photographs, and the value of looking around.",
+    oneLiner:
+      "Nature, photographs, and the parts of life that keep technical work grounded.",
     palette: stationColors.gold,
   },
   {
@@ -118,7 +123,8 @@ export const stations: Station[] = [
     parkOffset: [0.5, 0.25],
     href: "/contact",
     glyph: "VI",
-    oneLiner: "A radio tower at the edge of the map. Send a signal.",
+    oneLiner:
+      "Contact links for software, scientific computing, and technical conversations.",
     palette: stationColors.gold,
   },
 ];

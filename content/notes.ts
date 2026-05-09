@@ -1,68 +1,88 @@
 export interface Note {
   slug: string;
   title: string;
-  date: string;
-  reading: string;
   kicker: string;
   excerpt: string;
+  notation: string;
   tags: string[];
-  status: "draft" | "published" | "chapter";
+  status: "topic" | "draft" | "chapter";
+  repository?: string;
 }
 
 export const notes: Note[] = [
   {
-    slug: "why-implicit-methods-feel-magic",
-    title: "Why implicit methods feel like magic",
-    date: "2026-03-04",
-    reading: "9 min",
-    kicker: "Numerical · Time integration",
+    slug: "numerical-methods",
+    title: "Numerical methods",
+    kicker: "Algorithms · Stability · Approximation",
     excerpt:
-      "An explicit scheme tells you where to step next. An implicit scheme asks you to commit to a place that's consistent with itself. The first feels like dead reckoning; the second like landing softly.",
-    tags: ["PDEs", "stability"],
-    status: "published",
+      "Notes on algorithms, stability, approximation, and the behavior of computation when the mathematical model becomes executable.",
+    notation: "x_{n+1}=x_n+h f(x_n)",
+    tags: ["numerics", "stability"],
+    status: "topic",
+    repository: "https://github.com/TrymSaether/numerical-mathematics-notes",
   },
   {
-    slug: "the-grammar-of-finite-elements",
-    title: "The grammar of finite elements",
-    date: "2026-01-21",
-    reading: "14 min",
-    kicker: "FEM · Pedagogy",
+    slug: "finite-elements",
+    title: "Finite elements",
+    kicker: "Weak Forms · Meshes · Refinement",
     excerpt:
-      "Most FEM books teach you a vocabulary — basis, mass matrix, weak form. Few teach the grammar: which sentences these words can form together, and why some are nonsense.",
-    tags: ["FEM", "writing"],
-    status: "chapter",
+      "Material on weak forms, meshes, basis functions, refinement, and the route from geometry to sparse linear systems.",
+    notation: "a(u,v)=L(v)",
+    tags: ["FEM", "solvers"],
+    status: "topic",
+    repository: "https://github.com/TrymSaether/finite-element-method-notes",
   },
   {
-    slug: "what-i-learned-from-rewriting-a-solver",
-    title: "What I learned from rewriting a solver in Rust",
-    date: "2025-11-09",
-    reading: "11 min",
-    kicker: "Engineering · Rust",
+    slug: "optimization",
+    title: "Optimization",
+    kicker: "Constraints · Search Directions",
     excerpt:
-      "Three months and a great deal of pride later, the solver was 4× faster, the code was half the size, and I had a much sharper sense of what numerical software actually wants.",
-    tags: ["rust", "engineering"],
-    status: "published",
+      "First-order thinking, constraints, search directions, and the structure that makes optimization methods useful in practice.",
+    notation: "\\nabla f(x)=0",
+    tags: ["optimization"],
+    status: "topic",
+    repository: "https://github.com/TrymSaether/optimization-notes",
   },
   {
-    slug: "the-shape-of-a-good-error-bound",
-    title: "The shape of a good error bound",
-    date: "2025-08-30",
-    reading: "7 min",
-    kicker: "Analysis · Notation",
+    slug: "scientific-computing",
+    title: "Scientific computing",
+    kicker: "Models · Experiments · Inspection",
     excerpt:
-      "An error bound that depends on twelve constants is rarely useful. The good ones look like this: a small expression that says where the error lives, and a one-line story for why.",
-    tags: ["analysis"],
-    status: "published",
+      "Readable computational experiments and software patterns that make models easier to test, inspect, and explain.",
+    notation: "A x=b",
+    tags: ["experiments", "software"],
+    status: "topic",
   },
   {
-    slug: "field-notes-from-a-cabin",
-    title: "Field notes from a cabin without internet",
-    date: "2025-06-12",
-    reading: "5 min",
-    kicker: "Personal · Practice",
+    slug: "stochastic-modeling",
+    title: "Stochastic modeling",
+    kicker: "Uncertainty · Random Processes",
     excerpt:
-      "Eight days, one notebook, no derivatives that converged the first time. A small case for working slowly.",
-    tags: ["writing", "practice"],
-    status: "published",
+      "Notes on uncertainty, random processes, and the way probabilistic structure changes modeling decisions.",
+    notation: "dX_t=\\mu dt+\\sigma dW_t",
+    tags: ["stochastic", "modeling"],
+    status: "topic",
+    repository: "https://github.com/TrymSaether/stochastic-modeling-notes",
+  },
+  {
+    slug: "linear-algebra",
+    title: "Linear algebra",
+    kicker: "Solvers · Projections · Decompositions",
+    excerpt:
+      "The language behind numerical solvers: projections, decompositions, conditioning, and linear structure.",
+    notation: "V=Q R",
+    tags: ["linear algebra", "solvers"],
+    status: "topic",
+    repository: "https://github.com/TrymSaether/numerical-linear-algebra-notes",
+  },
+  {
+    slug: "mathematical-communication",
+    title: "Mathematical communication",
+    kicker: "Rigor · Notation · Explanation",
+    excerpt:
+      "Writing that preserves rigor while making the central idea easier to carry into code, diagrams, and team discussions.",
+    notation: "\\therefore",
+    tags: ["writing", "communication"],
+    status: "draft",
   },
 ];

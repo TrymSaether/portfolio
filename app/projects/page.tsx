@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
-import { projects } from "@/content/projects";
+import { projects, projectStatusLabels } from "@/content/projects";
 
 export const metadata: Metadata = {
   title: "Selected Work",
   description:
-    "Selected technical projects — simulators, solvers, and tools that turn theory into pixels.",
+    "Selected technical projects by Trym Sæther across numerical mathematics, scientific computing, compiler-adjacent tooling, and visualization.",
 };
 
 export default function ProjectsPage() {
@@ -18,14 +18,14 @@ export default function ProjectsPage() {
         index="IV"
         title={
           <>
-            Simulators, solvers,
+            Numerical software,
             <span className="font-display-italic text-[var(--accent)]">
               {" "}
-              and the tools to read them.
+              tools, and technical artifacts.
             </span>
           </>
         }
-        lede="Each crystal in this section is a project I shipped or am still polishing — research code, internal tools, and the occasional toy."
+        lede="A grounded selection of finite element work, simulation software, DAE tooling, ocean-current particle transport, and mathematical notes."
       >
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {projects.map((p, i) => (
@@ -59,12 +59,12 @@ export default function ProjectsPage() {
                     </svg>
                   </div>
                   <div className="relative">
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--accent)]">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--accent)]">
                         {p.domain}
                       </span>
                       <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">
-                        {p.year}
+                        {p.context}
                       </span>
                     </div>
                     <h3 className="mt-3 font-display text-2xl leading-tight">
@@ -89,14 +89,14 @@ export default function ProjectsPage() {
                     <div className="mt-6 flex items-center justify-between">
                       <span
                         className={`font-mono text-[10px] uppercase tracking-[0.18em] ${
-                          p.status === "shipped"
+                          p.status === "public"
                             ? "text-[var(--color-aurora)]"
-                            : p.status === "ongoing"
+                            : p.status === "writing"
                               ? "text-[var(--accent)]"
                               : "text-[var(--color-ember)]"
                         }`}
                       >
-                        ● {p.status}
+                        ● {projectStatusLabels[p.status]}
                       </span>
                       <span className="text-xs text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity">
                         Read more →

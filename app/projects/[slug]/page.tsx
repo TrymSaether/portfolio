@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Section } from "@/components/ui/Section";
-import { projects } from "@/content/projects";
+import { projects, projectStatusLabels } from "@/content/projects";
 
 export async function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -44,9 +44,7 @@ export default async function ProjectPage({
             {project.longBlurb}
           </p>
           <p className="text-base text-(--muted) leading-[1.75] max-w-prose">
-            More documentation, figures, and a live demo will land here as I
-            extract them from the original notebooks. In the meantime, the short
-            version above is honest about the scope.
+            {project.impact}
           </p>
           <div className="pt-4">
             <Link
@@ -62,9 +60,9 @@ export default async function ProjectPage({
         <aside className="lg:col-span-4 space-y-4">
           <div className="glow-card rounded-2xl p-5">
             <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-(--muted)">
-              Year
+              Context
             </p>
-            <p className="mt-1 font-display text-2xl">{project.year}</p>
+            <p className="mt-1 font-display text-2xl">{project.context}</p>
           </div>
           <div className="glow-card rounded-2xl p-5">
             <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-(--muted)">
@@ -86,9 +84,31 @@ export default async function ProjectPage({
               Status
             </p>
             <p className="mt-1 font-display text-xl text-[var(--accent)]">
-              {project.status}
+              {projectStatusLabels[project.status]}
             </p>
           </div>
+          {project.links?.length ? (
+            <div className="glow-card rounded-2xl p-5">
+              <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-(--muted)">
+                Links
+              </p>
+              <ul className="mt-3 space-y-2">
+                {project.links.map((link) => (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 text-sm text-[var(--accent)] hover:text-[var(--accent-strong)]"
+                    >
+                      {link.label}
+                      <span aria-hidden>↗</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
         </aside>
       </div>
     </Section>

@@ -6,29 +6,29 @@ import { Reveal } from "@/components/ui/Reveal";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Trym Sæther — mathematician and engineer. On thinking, shipping, curiosity, and clear communication.",
+    "Trym Sæther — mathematics, engineering, simulation software, compiler-adjacent tooling, and clear technical communication.",
 };
 
 const themes = [
   {
     glyph: "I",
     label: "Mathematical thinking",
-    body: "I treat code the way I learned to treat proofs: every line is a sentence in a larger argument. The argument should be small enough to hold in your head and rigorous enough to defend on a Tuesday.",
+    body: "I like starting from structure: what is conserved, what changes, which assumptions matter, and where a simpler representation reveals the problem.",
   },
   {
     glyph: "II",
     label: "Engineering mindset",
-    body: "Software is the place where mathematics meets weather. I care about the seams — the boundaries where a beautiful theorem has to compromise with a deadline, a CPU, and a future maintainer.",
+    body: "The implementation has to survive constraints. I care about interfaces, correctness, iteration speed, and how tools behave in real workflows.",
   },
   {
     glyph: "III",
-    label: "Curiosity",
-    body: "The best problems start as a small itch — a paper that didn't quite explain itself, a number that came out wrong, a tool that should exist but doesn't. I follow those for as long as they're interesting.",
+    label: "Software craft",
+    body: "Good software makes hard ideas easier to test, inspect, and extend. The code should carry the model without hiding the tradeoffs.",
   },
   {
     glyph: "IV",
-    label: "Communication",
-    body: "Mathematics is a language; like any language, it can be spoken poorly. Most of my writing is in service of the same goal as my code: make the difficult thing legible without making it small.",
+    label: "Clear communication",
+    body: "Writing is part of the work. Notes, diagrams, and explanations turn local understanding into something useful for a team.",
   },
 ];
 
@@ -40,11 +40,11 @@ export default function AboutPage() {
         index="I"
         title={
           <>
-            A short essay on thinking
-            <span className="font-display-italic"> in two languages.</span>
+            First principles,
+            <span className="font-display-italic"> then useful software.</span>
           </>
         }
-        lede="I grew up on the western coast of Norway, where the weather and the mathematics both came in moods. I learned to listen to either, and to write the second one down."
+        lede="I am Trym Sæther. My background spans Industrial Mathematics / Physics and Mathematics, Electrical Engineering, and simulation software development at Infineon."
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
           {/* Portrait card */}
@@ -59,19 +59,19 @@ export default function AboutPage() {
                 </div>
                 <div className="absolute inset-x-0 bottom-0 p-5">
                   <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#1c1a14]">
-                    Portrait · winter, somewhere above the tree line
+                    Trym Sæther · mathematics into software
                   </p>
                 </div>
               </div>
               <div className="p-6 bg-[var(--bg-elevated)] text-[var(--fg)]">
                 <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--muted)]">
-                  Currently
+                  Focus
                 </p>
                 <ul className="mt-3 space-y-2 text-sm">
-                  <li>· Building a spectral PDE solver in Julia</li>
-                  <li>· Drafting chapter six of the book</li>
-                  <li>· Teaching a small reading group on Sobolev spaces</li>
-                  <li>· Looking at light, mostly</li>
+                  <li>· Simulation software and scientific computing</li>
+                  <li>· Numerical methods and finite elements</li>
+                  <li>· Compiler-adjacent tooling for equation workflows</li>
+                  <li>· Mathematical notes and technical communication</li>
                 </ul>
               </div>
             </div>
@@ -81,30 +81,28 @@ export default function AboutPage() {
           <div className="lg:col-span-7 space-y-12">
             <Reveal>
               <p className="font-display text-2xl sm:text-3xl leading-snug text-balance">
-                I think of mathematics as a place I keep returning to. It rewards
-                slow visits. It is patient with people who don't have all the
-                vocabulary, and quietly merciless with people who pretend they
-                do.
+                I like understanding systems from first principles, then shaping
+                that understanding into software, models, notes, or tools that
+                other people can work with.
               </p>
             </Reveal>
 
             <Reveal delay={0.1}>
               <p className="text-base leading-[1.7] max-w-[60ch]">
-                For most of my early twenties, I was a physics student first and
-                a programmer second. The order has since flipped, then flipped
-                back, and now I think of them as the same activity, viewed from
-                two slightly different latitudes.
+                The common thread is technical depth with practical output:
+                numerical methods, simulation software, structured tooling,
+                and explanations that keep the mathematical core visible.
               </p>
             </Reveal>
 
             <Reveal delay={0.15}>
               <blockquote className="border-l border-[var(--line)] pl-6 sm:pl-8 my-2">
                 <p className="font-display-italic text-2xl leading-snug text-balance">
-                  The best engineering I have ever done began as a question I
-                  could only phrase in mathematical sentences.
+                  Good software makes hard ideas easier to test, inspect, and
+                  extend.
                 </p>
                 <footer className="mt-3 font-mono text-[10px] tracking-[0.3em] uppercase opacity-60">
-                  Notebook 04 · 2024
+                  Working principle
                 </footer>
               </blockquote>
             </Reveal>
@@ -128,8 +126,8 @@ export default function AboutPage() {
             <Reveal delay={0.2}>
               <div className="mt-4 pt-8 border-t border-[var(--line)] flex flex-wrap items-center gap-4 justify-between">
                 <p className="text-sm opacity-70 max-w-md">
-                  If you'd like the longer story, the timeline lives at the
-                  observatory.
+                  The work and education page keeps the factual timeline short:
+                  NTNU, Infineon, and the technical direction from there.
                 </p>
                 <Link
                   href="/work"

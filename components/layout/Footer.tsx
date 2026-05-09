@@ -9,8 +9,8 @@ export function Footer() {
             Trym Sæther
           </p>
           <p className="mt-2 text-sm text-[var(--muted)] max-w-xs">
-            Mathematics into software. Field notes from the road between the
-            two.
+            Mathematics into software: numerical methods, simulation tools,
+            compiler-adjacent workflows, and clear technical communication.
           </p>
           <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">
             63°25′N · 10°23′E · Trondheim
@@ -66,7 +66,7 @@ export function Footer() {
             © {new Date().getFullYear()} Trym Sæther — handcrafted, slowly
           </p>
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--muted)]">
-            Built with Next.js · Three.js · Coffee
+            Built with Next.js · Three.js · TypeScript
           </p>
         </div>
       </div>

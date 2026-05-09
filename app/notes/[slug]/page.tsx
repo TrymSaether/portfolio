@@ -35,7 +35,7 @@ export default async function NotePage({
     const mod = await import(`@/content/notes/${slug}.mdx`);
     MDXBody = mod.default;
   } catch {
-    // Note exists in the index but the chapter hasn't been written yet.
+    // Topic exists in the index even when a long-form MDX note is not present.
     MDXBody = null;
   }
 
@@ -46,8 +46,7 @@ export default async function NotePage({
           {note.kicker}
         </p>
         <p className="mt-3 font-mono text-[10px] tracking-[0.18em] uppercase text-(--muted)">
-          {note.date} · {note.reading} ·{" "}
-          {note.status === "chapter" ? "Book chapter" : note.status}
+          {note.notation} · {note.status}
         </p>
       </header>
 
@@ -59,8 +58,19 @@ export default async function NotePage({
         <div className="border border-(--line) rounded-2xl p-8">
           <h1 className="font-display text-4xl leading-tight">{note.title}</h1>
           <p className="mt-4 text-[var(--fg)]">{note.excerpt}</p>
+          {note.repository ? (
+            <a
+              href={note.repository}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-6 inline-flex items-center gap-2 text-sm text-[var(--accent)] hover:text-[var(--accent-strong)]"
+            >
+              Public notes repository
+              <span aria-hidden>↗</span>
+            </a>
+          ) : null}
           <p className="mt-8 font-mono text-[10px] tracking-[0.18em] uppercase text-(--muted)">
-            Draft in progress · check back soon.
+            Topic outline
           </p>
         </div>
       )}

@@ -23,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...notes.map((n) => ({
       url: `${BASE}/notes/${n.slug}`,
-      lastModified: new Date(n.date),
+      lastModified: now,
       changeFrequency: "yearly" as const,
       priority: 0.5,
     })),

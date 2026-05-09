@@ -5,39 +5,24 @@ import { Reveal } from "@/components/ui/Reveal";
 export const metadata: Metadata = {
   title: "Personal",
   description:
-    "Photography, hiking, landscape, and the value of looking around without a deliverable.",
+    "A personal page for Trym Sæther: nature, photographs, curiosity, discipline, and life outside the screen.",
 };
 
 const captions = [
   {
-    title: "Trollheimen, february",
-    body: "Eight days, one thermos, three pairs of mittens. The mountains taught me a lot about patience that year.",
+    title: "Nature",
+    body: "Mountains, weather, distance, and the kind of quiet that makes hard problems less tangled.",
     palette: ["#1a2336", "#3a4a78", "#a7b3cd"],
   },
   {
-    title: "Lofoten, blue hour",
-    body: "Twenty minutes a day when the sky and the sea agree on a colour.",
+    title: "Photos",
+    body: "A place for small observations, trips, landscapes, and visual notes from outside the screen.",
     palette: ["#0e1422", "#244168", "#74c0c8"],
   },
   {
-    title: "Cabin, midwinter",
-    body: "I write better when the kettle is on and the window is dark.",
+    title: "Discipline",
+    body: "The same patience that helps in mathematics also helps elsewhere: repetition, attention, and taste.",
     palette: ["#1c1a14", "#7a6a4a", "#f3c66b"],
-  },
-  {
-    title: "Hammerfest, low light",
-    body: "The polar night doesn't actually end. It only changes its mind.",
-    palette: ["#0a0e17", "#2a3651", "#d6dceb"],
-  },
-  {
-    title: "Bergen, after rain",
-    body: "Rooftops, copper, an espresso, a good argument with a friend.",
-    palette: ["#1f2030", "#5a4f6a", "#c0893a"],
-  },
-  {
-    title: "Linnaeus, herbarium",
-    body: "Studying old botanical plates because the typography is excellent and the curiosity is infectious.",
-    palette: ["#2a2014", "#7a5a30", "#ddd0b6"],
   },
 ];
 
@@ -49,14 +34,14 @@ export default function PersonalPage() {
         index="V"
         title={
           <>
-            Mountains, photographs,
+            Nature, photographs,
             <span className="font-display-italic text-[var(--accent)]">
               {" "}
-              and the value of looking around.
+              and life outside the screen.
             </span>
           </>
         }
-        lede="A small gallery from the parts of life that don't fit on a CV — and that I think are quietly the most important inputs to the work."
+        lede="A quieter side of the site: nature, photos, curiosity, discipline, and the parts of life that keep technical work grounded."
       />
 
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-20">

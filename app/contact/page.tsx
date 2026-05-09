@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Open the channel. Email and other links to reach Trym Sæther.",
+  description:
+    "Contact Trym Sæther for simulation software, scientific computing, compiler/tooling work, EDA-related software, and technical writing.",
 };
 
 export default function ContactPage() {
@@ -24,13 +24,13 @@ export default function ContactPage() {
               Send a signal.
               <br />
               <span className="font-display-italic text-[var(--accent)]">
-                I'll listen for it.
+                I&rsquo;ll listen for it.
               </span>
             </h1>
             <p className="mt-6 max-w-xl text-lg text-[var(--muted)] leading-relaxed">
-              For selected work in scientific computing, simulation tooling,
-              technical writing, or a careful conversation. The tower is on,
-              the kettle is warm.
+              For conversations about simulation software, scientific
+              computing, compiler and tooling work, EDA-related systems, or
+              mathematical communication.
             </p>
           </Reveal>
 

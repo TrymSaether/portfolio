@@ -17,15 +17,15 @@ export default function HomePage() {
         index="00"
         title={
           <>
-            A small atlas of how a mathematician thinks,
-            <br className="hidden lg:block" /> and what an engineer
+            A small atlas of mathematics,
+            <br className="hidden lg:block" /> software, and the tools they
             <span className="font-display-italic text-[var(--accent)]">
               {" "}
-              ships.
+              produce.
             </span>
           </>
         }
-        lede="Six stations. Six ways into the same practice. Pick a route — the rover takes its time."
+        lede="Six stations through numerical methods, simulation software, compiler-adjacent tooling, notes, and contact."
       >
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {stations.map((s, i) => (
@@ -59,8 +59,8 @@ export default function HomePage() {
       <Section
         kicker="Selected work"
         index="IV"
-        title={<>Things built, mostly for science.</>}
-        lede="A handful of simulators, solvers, and tools that turn theory into something you can press a button on."
+        title={<>Technical artifacts with mathematical structure.</>}
+        lede="Finite element work, simulation prototypes, DAE tooling, particle transport, and notes that make the reasoning inspectable."
       >
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {projects.slice(0, 3).map((p, i) => (
@@ -70,7 +70,7 @@ export default function HomePage() {
                 className="group block h-full"
               >
                 <article className="glow-card h-full rounded-2xl p-6">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--muted)]">
                       {p.kicker}
                     </span>
@@ -116,23 +116,23 @@ export default function HomePage() {
       <Section
         kicker="Notes & Book"
         index="III"
-        title={<>From the field notebook.</>}
-        lede="Working notes on numerical methods, PDEs, and the slow craft of writing mathematics for engineers."
+        title={<>Notes for carrying mathematics into software.</>}
+        lede="Numerical methods, finite elements, optimization, stochastic modeling, linear algebra, and mathematical communication."
       >
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {notes.slice(0, 4).map((n, i) => (
             <Reveal key={n.slug} delay={i * 0.05} as="li">
               <Link
-                href={`/notes#${n.slug}`}
+                href={`/notes/${n.slug}`}
                 className="group block h-full"
               >
                 <article className="glow-card h-full rounded-2xl p-6">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--muted)]">
                       {n.kicker}
                     </span>
                     <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent)]">
-                      {n.status === "chapter" ? "Book chapter" : n.status}
+                      {n.notation}
                     </span>
                   </div>
                   <h3 className="mt-3 font-display text-2xl leading-tight">
@@ -142,7 +142,7 @@ export default function HomePage() {
                     {n.excerpt}
                   </p>
                   <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">
-                    {n.date} · {n.reading}
+                    {n.tags.join(" · ")}
                   </p>
                 </article>
               </Link>
@@ -163,7 +163,7 @@ export default function HomePage() {
             </span>
           </>
         }
-        lede="I'm available for selected work in scientific computing, simulation tooling, and technical writing."
+        lede="For conversations about simulation software, scientific computing, compiler/tooling work, EDA-related systems, or mathematical communication."
         align="center"
       >
         <div className="flex flex-wrap items-center justify-center gap-3 mt-2">

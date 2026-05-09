@@ -11,11 +11,11 @@ export const metadata: Metadata = {
     template: "%s · Trym Sæther",
   },
   description:
-    "Portfolio of Trym Sæther — mathematician, engineer, and developer. Simulation software, numerical methods, scientific computing, and writing.",
+    "Portfolio of Trym Sæther — mathematics, simulation software, numerical methods, scientific computing, compiler-adjacent tooling, and technical writing.",
   openGraph: {
     title: "Trym Sæther — Mathematics into software.",
     description:
-      "Simulation software, numerical methods, scientific computing, and writing — by Trym Sæther.",
+      "Simulation software, numerical methods, scientific computing, compiler-adjacent tooling, and technical writing — by Trym Sæther.",
     type: "website",
     locale: "en_GB",
   },
