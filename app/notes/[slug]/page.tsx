@@ -51,7 +51,7 @@ export default async function NotePage({
       </header>
 
       {MDXBody ? (
-        <div className="notes-mdx font-sans text-[#2a241d] [&_*]:!opacity-100 [&_h1]:!text-[#17130f] [&_h1]:font-display [&_h1]:text-5xl [&_h1]:leading-tight [&_h2]:!text-[#17130f] [&_h2]:font-display [&_h2]:text-3xl [&_h2]:leading-tight [&_h2]:mt-14 [&_h2]:mb-6 [&_p]:!text-[#3f372e] [&_p]:leading-8 [&_p]:text-lg [&_p]:mb-6 [&_li]:!text-[#3f372e] [&_li]:leading-8 [&_li]:text-lg [&_ul]:space-y-4 [&_ul]:my-6 [&_strong]:!text-[#17130f] [&_strong]:font-semibold [&_li::marker]:!text-[#b8862a] [&_code]:rounded-md [&_code]:!bg-[#565861] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-sm [&_code]:!text-[#f1d089] [&_pre]:rounded-2xl [&_pre]:!bg-[#565861] [&_pre]:p-6 [&_pre]:!text-[#ece4d8] [&_pre_code]:!bg-transparent [&_pre_code]:p-0 [&_pre_code]:!text-[#ece4d8] [&_a]:!text-[#8a5d16] [&_a]:underline-offset-4 hover:[&_a]:!text-[#5d3b08]">
+        <div className="notes-mdx">
           <MDXBody />
         </div>
       ) : (
