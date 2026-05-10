@@ -73,6 +73,19 @@
   --selection-bg: var(--color-gold-400);
   --selection-fg: var(--color-ink-950);
 
+  /* Article / MDX typography */
+  --article-ink: #f6f1e6;
+  --article-heading: #ffffff;
+  --article-body: #d6dceb;
+  --article-muted: #a7b3cd;
+  --article-accent: var(--color-gold-400);
+  --article-link: var(--color-gold-500);
+  --article-link-hover: #fff0bd;
+  --article-code-bg: rgba(246, 241, 230, 0.1);
+  --article-code-text: #f3c66b;
+  --article-pre-bg: rgba(7, 9, 14, 0.72);
+  --article-pre-text: #f6f1e6;
+
   /* Topographic backdrop layers */
   --topo-glow-a: rgba(243, 198, 107, 0.06);
   --topo-glow-b: rgba(116, 192, 200, 0.05);
@@ -127,6 +140,19 @@
 
   --selection-bg: #b8862a;
   --selection-fg: #f6f1e6;
+
+  /* Article / MDX typography */
+  --article-ink: #2a241d;
+  --article-heading: #17130f;
+  --article-body: #3f372e;
+  --article-muted: #6e6552;
+  --article-accent: #b8862a;
+  --article-link: #8a5d16;
+  --article-link-hover: #5d3b08;
+  --article-code-bg: #565861;
+  --article-code-text: #f1d089;
+  --article-pre-bg: #565861;
+  --article-pre-text: #ece4d8;
 
   --topo-glow-a: rgba(184, 134, 42, 0.07);
   --topo-glow-b: rgba(116, 144, 152, 0.05);
@@ -364,6 +390,107 @@ body {
   50% { transform: translateY(8px); opacity: 1; }
 }
 .scroll-cue { animation: scroll-cue 2.4s ease-in-out infinite; }
+
+/* -------------------------------------------------------------------------
+   MDX article typography
+   ------------------------------------------------------------------------- */
+
+.notes-mdx {
+  color: var(--article-ink);
+  font-family: var(--font-sans);
+}
+
+.notes-mdx h1,
+.notes-mdx h2,
+.notes-mdx h3 {
+  color: var(--article-heading);
+  font-family: var(--font-display);
+}
+
+.notes-mdx h1 {
+  font-size: clamp(2.75rem, 7vw, 5rem);
+  line-height: 0.98;
+  margin-bottom: 1.5rem;
+}
+
+.notes-mdx h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.05;
+  margin-top: 3.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.notes-mdx h3 {
+  font-size: 1.5rem;
+  line-height: 1.2;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.notes-mdx p {
+  color: var(--article-body);
+  font-size: 1.125rem;
+  line-height: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.notes-mdx ul,
+.notes-mdx ol {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.notes-mdx li {
+  color: var(--article-body);
+  font-size: 1.125rem;
+  line-height: 2rem;
+  margin-top: 1rem;
+}
+
+.notes-mdx li::marker {
+  color: var(--article-accent);
+}
+
+.notes-mdx strong {
+  color: var(--article-heading);
+  font-weight: 650;
+}
+
+.notes-mdx a {
+  color: var(--article-link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: color 180ms var(--ease-out-quint);
+}
+
+.notes-mdx a:hover {
+  color: var(--article-link-hover);
+}
+
+.notes-mdx code {
+  border-radius: 0.375rem;
+  background: var(--article-code-bg);
+  color: var(--article-code-text);
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  padding: 0.125rem 0.375rem;
+}
+
+.notes-mdx pre {
+  background: var(--article-pre-bg);
+  border-radius: 1rem;
+  color: var(--article-pre-text);
+  margin: 2rem 0;
+  overflow-x: auto;
+  padding: 1.5rem;
+}
+
+.notes-mdx pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
 
 /* -------------------------------------------------------------------------
    MDX code-block (rehype-pretty-code via Shiki)
