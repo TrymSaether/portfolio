@@ -45,17 +45,19 @@ export default async function NotePage({
         <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-[var(--accent)]">
           {note.kicker}
         </p>
-        <p className="mt-3 font-mono text-[10px] tracking-[0.18em] uppercase text-(--muted)">
+        <p className="mt-3 font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--muted)]">
           {note.notation} · {note.status}
         </p>
       </header>
 
       {MDXBody ? (
-        <div className="font-sans">
+        <div
+          className="font-sans [&_h1]:font-display [&_h1]:text-5xl [&_h1]:leading-tight [&_h1]:text-[#27221c] [&_h2]:font-display [&_h2]:text-3xl [&_h2]:leading-tight [&_h2]:text-[#27221c] [&_h2]:mt-14 [&_h2]:mb-6 [&_p]:text-[#6b6257] [&_p]:leading-8 [&_p]:text-lg [&_p]:mb-6 [&_strong]:text-[#27221c] [&_strong]:font-semibold [&_ul]:space-y-4 [&_ul]:my-6 [&_li]:text-[#6b6257] [&_li]:leading-8 [&_li]:text-lg [&_li::marker]:text-[#c99335] [&_code]:rounded-md [&_code]:bg-[#565861] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-sm [&_code]:text-[#f1d089] [&_pre]:rounded-2xl [&_pre]:bg-[#565861] [&_pre]:p-6 [&_pre]:text-[#ece4d8] [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-[#ece4d8] [&_a]:text-[#9f6f21] [&_a]:underline-offset-4 hover:[&_a]:text-[#6f4a12]"
+        >
           <MDXBody />
         </div>
       ) : (
-        <div className="border border-(--line) rounded-2xl p-8">
+        <div className="border border-[var(--line)] rounded-2xl p-8">
           <h1 className="font-display text-4xl leading-tight">{note.title}</h1>
           <p className="mt-4 text-[var(--fg)]">{note.excerpt}</p>
           {note.repository ? (
@@ -69,13 +71,13 @@ export default async function NotePage({
               <span aria-hidden>↗</span>
             </a>
           ) : null}
-          <p className="mt-8 font-mono text-[10px] tracking-[0.18em] uppercase text-(--muted)">
+          <p className="mt-8 font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--muted)]">
             Topic outline
           </p>
         </div>
       )}
 
-      <footer className="mt-16 pt-8 border-t border-(--line) flex items-center justify-between">
+      <footer className="mt-16 pt-8 border-t border-[var(--line)] flex items-center justify-between">
         <Link
           href="/notes"
           className="inline-flex items-center gap-2 text-sm text-[var(--accent)] hover:text-[var(--accent-strong)]"
@@ -83,7 +85,7 @@ export default async function NotePage({
           <span aria-hidden>←</span>
           All notes
         </Link>
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--muted)">
+        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">
           {note.tags.join(" · ")}
         </p>
       </footer>
