@@ -1,0 +1,37 @@
+# Numerical Mathematics Notes
+
+**Numerical Mathematics Notes** collects course-oriented material on numerical mathematics, with emphasis on algorithms, stability, approximation, and the behavior of computation when mathematical models become executable.
+
+The notes are written as a LaTeX source project with a main document, a condensed cheat sheet, chapter files, shared macros, figures, and supporting backmatter.
+
+## Purpose
+
+These notes are the compact study-oriented counterpart to the larger numerical mathematics book project.
+
+Where the book is meant to become a polished long-form manuscript, these notes are closer to a working mathematical notebook: practical, course-aligned, and optimized for revision, derivation, and exam preparation.
+
+## Focus
+
+The material centers on the core questions of numerical mathematics:
+
+- how floating-point computation changes exact mathematical reasoning,
+- how approximation errors are introduced and propagated,
+- how stability and conditioning determine whether an algorithm is reliable,
+- how numerical methods translate continuous or symbolic mathematics into finite procedures.
+
+## Technical form
+
+The repository is plain LaTeX-based. It includes a main notes document, a cheat-sheet entry point, chapter sources, figures, shared definitions, and backmatter material.
+
+Typical builds use `latexmk`:
+
+```bash
+latexmk -pdf main.tex
+latexmk -pdf cheat-sheet.tex
+```
+
+## Status
+
+This is a public notes repository and a practical companion to the broader numerical mathematics library.
+
+[View source on GitHub](https://github.com/TrymSaether/numerical-mathematics-notes)
