@@ -6,7 +6,7 @@ import { projects } from "@/content/projects";
 export const metadata: Metadata = {
   title: "Selected Work",
   description:
-    "Selected technical projects by Trym Sæther across numerical mathematics, scientific computing, compiler-adjacent tooling, and visualization.",
+    "Selected technical projects by Trym Sæther across simulation software, numerical methods, machine learning, optical flow, and visualization.",
 };
 
 export default function ProjectsPage() {
@@ -24,7 +24,7 @@ export default function ProjectsPage() {
             </span>
           </>
         }
-        lede="A grounded selection of finite element work, simulation software, DAE tooling, ocean-current particle transport, and mathematical notes."
+        lede="A grounded selection of mixed-signal simulation, SVM classification, optical flow, adaptive FEM, ocean-current particle transport, and numerical image processing."
       >
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {projects.map((p, i) => (

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
@@ -41,24 +42,27 @@ export default function AboutPage() {
         title={
           <>
             First principles,
+            <br className="hidden sm:block" />
             <span className="font-display-italic"> then useful software.</span>
           </>
         }
         lede="I am Trym Sæther. My background spans Industrial Mathematics / Physics and Mathematics, Electrical Engineering, and simulation software development at Infineon."
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-          {/* Portrait card */}
           <Reveal className="lg:col-span-5 lg:sticky lg:top-28">
             <div className="relative rounded-2xl border border-[var(--line)] overflow-hidden">
-              <div className="aspect-[4/5] bg-gradient-to-br from-[#ddd0b6] via-[#c0a875] to-[#7a6a4a] relative">
-                {/* Decorative monogram in lieu of photo — palette is intentionally constant */}
-                <div className="absolute inset-0 grid place-items-center">
-                  <span className="font-display text-[180px] leading-none text-[#1c1a14] opacity-25 select-none">
-                    T
-                  </span>
-                </div>
+              <div className="aspect-[4/5] bg-[#1c1a14] relative">
+                <Image
+                  src="/assets/images/personal/portrait-user-06.jpeg"
+                  alt="Trym Sæther outdoors"
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1c1a14]/70 via-transparent to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-5">
-                  <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#1c1a14]">
+                  <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-white/80">
                     Trym Sæther · mathematics into software
                   </p>
                 </div>
@@ -73,6 +77,13 @@ export default function AboutPage() {
                   <li>· Compiler-adjacent tooling for equation workflows</li>
                   <li>· Mathematical notes and technical communication</li>
                 </ul>
+                <Image
+                  src="/assets/images/signatures/my-signature.png"
+                  alt="Trym Sæther signature"
+                  width={594}
+                  height={145}
+                  className="signature-mark mt-5 h-9 w-auto opacity-85"
+                />
               </div>
             </div>
           </Reveal>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -8,21 +9,48 @@ export const metadata: Metadata = {
     "A personal page for Trym Sæther: nature, photographs, curiosity, discipline, and life outside the screen.",
 };
 
-const captions = [
+const photographs = [
   {
-    title: "Nature",
-    body: "Mountains, weather, distance, and the kind of quiet that makes hard problems less tangled.",
-    palette: ["#1a2336", "#3a4a78", "#a7b3cd"],
+    title: "Frame 01",
+    body: "Mountain air, distance, and the habit of looking carefully.",
+    src: "/assets/images/personal/activity-01.jpeg",
+    alt: "Personal photograph from the previous portfolio, frame 01",
   },
   {
-    title: "Photos",
-    body: "A place for small observations, trips, landscapes, and visual notes from outside the screen.",
-    palette: ["#0e1422", "#244168", "#74c0c8"],
+    title: "Frame 02",
+    body: "Small observations from outside the screen.",
+    src: "/assets/images/personal/activity-02.jpeg",
+    alt: "Personal photograph from the previous portfolio, frame 02",
   },
   {
-    title: "Discipline",
-    body: "The same patience that helps in mathematics also helps elsewhere: repetition, attention, and taste.",
-    palette: ["#1c1a14", "#7a6a4a", "#f3c66b"],
+    title: "Frame 03",
+    body: "Weather, quiet, and problems that untangle slowly.",
+    src: "/assets/images/personal/activity-03.jpeg",
+    alt: "Personal photograph from the previous portfolio, frame 03",
+  },
+  {
+    title: "Frame 04",
+    body: "Light and landscape as a useful change of pace.",
+    src: "/assets/images/personal/activity-04.jpeg",
+    alt: "Personal photograph from the previous portfolio, frame 04",
+  },
+  {
+    title: "Frame 05",
+    body: "A reminder that attention is trained by repetition.",
+    src: "/assets/images/personal/activity-05.jpg",
+    alt: "Personal photograph from the previous portfolio, frame 05",
+  },
+  {
+    title: "Frame 06",
+    body: "The visual side of patience: wait, frame, revise.",
+    src: "/assets/images/personal/activity-06.jpg",
+    alt: "Personal photograph from the previous portfolio, frame 06",
+  },
+  {
+    title: "Frame 07",
+    body: "Open space, carried back into technical work.",
+    src: "/assets/images/personal/activity-07.jpg",
+    alt: "Personal photograph from the previous portfolio, frame 07",
   },
 ];
 
@@ -46,34 +74,18 @@ export default function PersonalPage() {
 
       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-20">
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {captions.map((c, i) => (
+          {photographs.map((c, i) => (
             <Reveal as="li" key={c.title} delay={i * 0.05}>
               <figure className="group glow-card rounded-2xl overflow-hidden">
-                <div
-                  className="aspect-[4/5] relative overflow-hidden"
-                  style={{
-                    background: `linear-gradient(160deg, ${c.palette[0]}, ${c.palette[1]} 60%, ${c.palette[2]})`,
-                  }}
-                >
-                  {/* Layered "landscape" of triangular ridges */}
-                  <svg
-                    viewBox="0 0 400 500"
-                    className="absolute inset-0 w-full h-full"
-                    preserveAspectRatio="xMidYMid slice"
-                  >
-                    <polygon
-                      points="0,500 0,330 80,260 150,310 220,240 290,300 360,250 400,290 400,500"
-                      fill={c.palette[1]}
-                      opacity="0.85"
-                    />
-                    <polygon
-                      points="0,500 0,400 90,330 160,380 240,320 310,360 400,320 400,500"
-                      fill={c.palette[0]}
-                      opacity="0.95"
-                    />
-                    <circle cx="320" cy="120" r="34" fill={c.palette[2]} opacity="0.55" />
-                    <circle cx="320" cy="120" r="60" fill={c.palette[2]} opacity="0.18" />
-                  </svg>
+                <div className="aspect-[4/5] relative overflow-hidden bg-[#1c1a14]">
+                  <Image
+                    src={c.src}
+                    alt={c.alt}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
                   <span className="absolute top-3 left-3 font-mono text-[10px] tracking-[0.3em] uppercase text-white/70">
                     plate {String(i + 1).padStart(2, "0")}
                   </span>

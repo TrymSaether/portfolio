@@ -178,6 +178,14 @@ body {
   overflow-x: hidden;
 }
 
+.signature-mark {
+  filter: none;
+}
+
+.theme-cream .signature-mark {
+  filter: invert(1);
+}
+
 ::selection {
   background: var(--selection-bg);
   color: var(--selection-fg);

@@ -40,6 +40,60 @@ export function getProjectBySlug(slug: string) {
 
 export const projects: Project[] = [
   {
+    slug: "vamsc",
+    title: "VAMSC",
+    kicker: "Mixed-Signal Simulation · Systems Modeling",
+    context: "Simulation prototype",
+    blurb:
+      "A C++ mixed-signal simulation project focused on model representation, solver structure, and inspectable system behavior.",
+    longBlurb:
+      "VAMSC is selected here as simulation software with a systems mindset. The work sits close to EDA-related modeling: how equations, components, state, and solver decisions are represented so the resulting tool remains testable and understandable.",
+    impact:
+      "Mixed-signal simulation lives between mathematical models and engineering constraints. The representation of the model determines how easily the software can be debugged, extended, and trusted.",
+    stack: ["C++", "Simulation", "EDA-related modeling"],
+    domain: "Scientific Computing",
+    status: "private",
+    glyph: "Σ",
+  },
+  {
+    slug: "svm-classifier",
+    title: "SVM Classifier",
+    kicker: "Support Vector Machines · Classification",
+    context: "Public machine-learning project",
+    blurb:
+      "A compact classifier project for support-vector-machine experiments, decision boundaries, and model behavior checks.",
+    longBlurb:
+      "The SVM classifier project treats classification as a numerical and geometric problem. It focuses on how margin-based models separate data, how parameters change the resulting decision boundary, and how the implementation can make those choices inspectable.",
+    impact:
+      "The useful part is the feedback loop: train a model, inspect the boundary, adjust the formulation, and keep the connection between optimization problem and classifier behavior visible.",
+    stack: ["Python", "Support vector machines", "Classification"],
+    domain: "Scientific Computing",
+    status: "public",
+    glyph: "∥",
+    links: [
+      {
+        label: "Repository",
+        href: "https://github.com/TrymSaether/svm-classifier",
+      },
+    ],
+  },
+  {
+    slug: "optflow",
+    title: "Optflow",
+    kicker: "Optical Flow · Numerical Linear Algebra",
+    context: "Private NLA project",
+    blurb:
+      "An optical-flow project with numerical solvers and benchmarks for motion estimation in image sequences.",
+    longBlurb:
+      "Optflow connects image motion estimation with numerical linear algebra. The project centers on solver choices, benchmark structure, and the practical behavior of optical-flow formulations when they are implemented and compared.",
+    impact:
+      "Optical flow is a useful pressure test for numerical methods because the output is both visual and quantitative. Solver mistakes show up as artifacts, unstable motion fields, or poor benchmark behavior.",
+    stack: ["Optical flow", "Numerical linear algebra", "Benchmarks"],
+    domain: "Graphics / Visualization",
+    status: "private",
+    glyph: "∇",
+  },
+  {
     slug: "afem",
     title: "AFEM",
     kicker: "Adaptive Finite Element Methods",
@@ -54,60 +108,6 @@ export const projects: Project[] = [
     domain: "Numerical Mathematics",
     status: "private",
     glyph: "∫",
-  },
-  {
-    slug: "quadratic-fem-solvers",
-    title: "Quadratic FEM Solvers",
-    kicker: "P2 Elements · Poisson · Optimal Control",
-    context: "Public academic code",
-    blurb:
-      "Python implementations of quadratic finite element solvers for a 1D Poisson problem and a related optimal-control problem.",
-    longBlurb:
-      "This repository implements quadratic P2 finite element methods with vectorized assembly, sparse linear algebra, convergence studies, and plotting utilities. The code includes a primary FEM toolkit, compact reference solvers, and notebooks used to inspect the numerical behavior.",
-    impact:
-      "The useful part is the traceability: weak forms become sparse matrices, convergence tables check the implementation, and the plotting utilities make mistakes in assembly or boundary handling visible.",
-    stack: ["Python", "NumPy / SciPy", "Sparse assembly"],
-    domain: "Numerical Mathematics",
-    status: "public",
-    glyph: "P₂",
-    links: [
-      {
-        label: "Repository",
-        href: "https://github.com/TrymSaether/finite-element-solver",
-      },
-    ],
-  },
-  {
-    slug: "vamsc",
-    title: "VAMSC",
-    kicker: "Mixed-Signal Simulation · Systems Modeling",
-    context: "Simulation prototype",
-    blurb:
-      "A C++ mixed-signal simulation prototype, framed around careful model representation and inspectable solver behavior.",
-    longBlurb:
-      "VAMSC is selected here as simulation software with a systems mindset. The work sits close to EDA-related modeling: how equations, components, state, and solver decisions are represented so the resulting tool remains testable and understandable.",
-    impact:
-      "Mixed-signal simulation lives between mathematical models and engineering constraints. The representation of the model determines how easily the software can be debugged, extended, and trusted.",
-    stack: ["C++", "Simulation", "EDA-related modeling"],
-    domain: "Scientific Computing",
-    status: "private",
-    glyph: "Σ",
-  },
-  {
-    slug: "fordae",
-    title: "ForDAE",
-    kicker: "Differential-Algebraic Equations · Tooling",
-    context: "Compiler-adjacent tooling",
-    blurb:
-      "Tools for DAE workflows, structured problem descriptions, and the bridge from equations to executable software.",
-    longBlurb:
-      "ForDAE is a tooling-oriented project around differential-algebraic equations. The core idea is to keep the mathematical structure of a problem visible while moving toward executable code and solver workflows.",
-    impact:
-      "DAE systems are easy to write and hard to run robustly. A structured workflow makes solver choices explicit and keeps the equation-level model close to the implementation.",
-    stack: ["Fortran", "DAEs", "Structured descriptions"],
-    domain: "Compiler / Programming Languages",
-    status: "private",
-    glyph: "λ",
   },
   {
     slug: "ocean-particle-transport",
@@ -132,32 +132,24 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "notes-and-book",
-    title: "Notes & Book",
-    kicker: "Mathematical Communication · TeX",
-    context: "Course notes and drafts",
+    slug: "numerical-image-processing",
+    title: "Numerical Image Processing",
+    kicker: "Image Processing · Numerical Methods",
+    context: "Public image-processing project",
     blurb:
-      "A set of notes and book-style writing on numerical methods, finite elements, optimization, and mathematical communication.",
+      "A numerical image-processing project for filtering, transformations, and algorithmic inspection of image data.",
     longBlurb:
-      "The notes collect derivations, examples, diagrams, and explanations for mathematical topics that benefit from careful structure. They treat communication as technical work in its own right, not as polish added after the fact.",
+      "Numerical Image Processing collects image operations as numerical algorithms rather than opaque effects. The project emphasizes the link between arrays, operators, transformations, and the visual changes they produce.",
     impact:
-      "The value is durability. Good notes turn local understanding into a reference that can be checked, shared, and extended without flattening the mathematics.",
-    stack: ["TeX", "Numerical methods", "Technical writing"],
-    domain: "Tools / Infrastructure",
-    status: "writing",
-    glyph: "§",
+      "Image-processing code is easiest to trust when the numerical operation and the visible result can be inspected together. This project keeps that relationship explicit.",
+    stack: ["Python", "Image processing", "Numerical algorithms"],
+    domain: "Graphics / Visualization",
+    status: "public",
+    glyph: "□",
     links: [
       {
-        label: "Numerical mathematics notes",
-        href: "https://github.com/TrymSaether/numerical-mathematics-notes",
-      },
-      {
-        label: "Finite element method notes",
-        href: "https://github.com/TrymSaether/finite-element-method-notes",
-      },
-      {
-        label: "Optimization notes",
-        href: "https://github.com/TrymSaether/optimization-notes",
+        label: "Repository",
+        href: "https://github.com/TrymSaether/numerical-image-processing",
       },
     ],
   },
