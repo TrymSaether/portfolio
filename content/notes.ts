@@ -15,6 +15,17 @@ export function getNoteBySlug(slug: string) {
 
 export const notes: Note[] = [
   {
+    slug: "numerical-mathematics-book",
+    title: "Numerical Mathematics",
+    kicker: "Flagship Manuscript · Numerical Analysis",
+    excerpt:
+      "A long-form mathematical manuscript developing numerical analysis from floating-point arithmetic and error analysis to function spaces, approximation, integration, and differential equations.",
+    notation: "\\|f-p_n\\| \\to 0",
+    tags: ["book", "numerics", "analysis"],
+    status: "chapter",
+    repository: "https://github.com/TrymSaether/numerical-mathematics-book",
+  },
+  {
     slug: "numerical-methods",
     title: "Numerical methods",
     kicker: "Algorithms · Stability · Approximation",
