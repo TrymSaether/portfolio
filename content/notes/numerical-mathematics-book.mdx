@@ -1,0 +1,44 @@
+# Numerical Mathematics
+
+**Numerical Mathematics** is a long-form manuscript on the mathematics of computation.
+
+The project develops numerical analysis as a coherent mathematical subject: from floating-point arithmetic, error propagation, and conditioning to linear algebra, function spaces, approximation theory, Fourier analysis, numerical integration, and differential equations.
+
+Rather than treating numerical methods as isolated algorithms, the manuscript focuses on the structures that make them work: stability, convergence, approximation, geometry, and the relationship between continuous mathematics and finite computation.
+
+## Motivation
+
+The project is motivated by a gap I often feel in numerical mathematics: methods are frequently presented either as computational recipes or as abstract analysis, while the strongest understanding lives between the two.
+
+This manuscript is my attempt to build that bridge carefully. It is written to be rigorous enough for mathematical study, concrete enough for computation, and visually clear enough to support long-term learning.
+
+## Coverage
+
+The book is organized around the main pillars of numerical mathematics:
+
+- **Foundations** — floating-point arithmetic, error analysis, stability, conditioning, and computational notation.
+- **Linear algebra** — vector spaces, Hilbert spaces, linear systems, orthogonality, conditioning, and iterative methods.
+- **Function spaces** — Banach spaces, Hilbert spaces, operators, projections, and analytical structure.
+- **Approximation and Fourier analysis** — interpolation, splines, orthogonal polynomials, Fourier methods, and function approximation.
+- **Numerical integration** — quadrature rules, Gaussian quadrature, adaptive integration, and accumulated error.
+- **Differential equations** — numerical methods for initial value problems and continuous models discretized for computation.
+
+## Technical form
+
+The book is developed as a modular LaTeX manuscript, not a loose collection of notes.
+
+The repository uses a subfiles-based architecture with independent parts, shared styling, structured bibliography files, generated figures, and a reproducible build system based on `latexmk`, LuaLaTeX, and `make`.
+
+```bash
+make build
+make watch
+make clean
+```
+
+Python is used where useful for generating plots, tables, and computational illustrations, while TikZ and LaTeX provide the final mathematical presentation.
+
+## Status
+
+This is an active manuscript project. The repository currently functions as both a writing environment and a publishing system for a larger mathematical text.
+
+[View source on GitHub](https://github.com/TrymSaether/numerical-mathematics-book)
