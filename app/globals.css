@@ -76,7 +76,7 @@
   /* Article / MDX typography */
   --article-ink: #f6f1e6;
   --article-heading: #ffffff;
-  --article-body: #d6dceb;
+  --article-body: #c2cbdd;
   --article-muted: #a7b3cd;
   --article-accent: var(--color-gold-400);
   --article-link: var(--color-gold-500);
@@ -468,7 +468,7 @@ body {
   color: var(--article-link-hover);
 }
 
-.notes-mdx code {
+.notes-mdx :not(pre) > code {
   border-radius: 0.375rem;
   background: var(--article-code-bg);
   color: var(--article-code-text);
