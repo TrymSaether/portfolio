@@ -162,6 +162,15 @@ export function buildPath(
     Math.sin(fromIndex * 12.9898 + toIndex * 78.233) * 43758.5453;
   const bow = ((edgeHash - Math.floor(edgeHash)) * 2 - 1) * 1.4; // -1.4..1.4
 
+  // Endpoint lifts — some stations (e.g. Notes & Book) sit on a tall peak and
+  // need the path to descend gradually rather than diving toward the default
+  // mid-path clearance, which would slice through the surrounding terrain.
+  const fromLift =
+    stations[fromIndex].elevationOffset ?? DEFAULT_STATION_ELEVATION_OFFSET;
+  const toLift =
+    stations[toIndex].elevationOffset ?? DEFAULT_STATION_ELEVATION_OFFSET;
+  const MIN_CLEARANCE = 0.22;
+
   const pts: THREE.Vector3[] = [];
   for (let i = 0; i <= N; i++) {
     const u = i / N;
@@ -169,11 +178,28 @@ export function buildPath(
     const w = Math.sin(u * Math.PI);
     const x = a.x + dx * u + px * bow * w;
     const z = a.z + dz * u + pz * bow * w;
-    // Use local-max with a small radius so the curve stays above neighborhood peaks
-    const y = maxElevationLocal(x, z, 0.16, 1, 6) + 0.13;
+
+    // Decay each endpoint's extra lift over the first/last 30% of the path so
+    // the descent from elevated stations clears nearby terrain.
+    const decay = (t: number) => {
+      const s = Math.max(0, Math.min(1, t / 0.3));
+      // smoothstep
+      return 1 - s * s * (3 - 2 * s);
+    };
+    const endpointLift = Math.max(
+      fromLift * decay(u),
+      toLift * decay(1 - u),
+    );
+    const clearance = Math.max(MIN_CLEARANCE, endpointLift);
+
+    // Wider local-max footprint catches neighbourhood peaks the spline could
+    // otherwise interpolate through.
+    const y = maxElevationLocal(x, z, 0.32, 2, 8) + clearance;
     pts.push(new THREE.Vector3(x, y, z));
   }
-  return new THREE.CatmullRomCurve3(pts, false, "catmullrom", 0.4);
+  // Centripetal Catmull-Rom (alpha = 0.5) prevents overshoot between samples,
+  // which was letting the smoothed curve dip below ridges between peaks.
+  return new THREE.CatmullRomCurve3(pts, false, "catmullrom", 0.5);
 }
 
 export interface PathEdge {
@@ -227,5 +253,5 @@ export function directionalCurve(
   if (edge.fromIndex === fromIndex) return edge.curve;
   // Reverse: build a fresh curve walking the points in reverse
   const reversed = [...edge.curve.points].reverse();
-  return new THREE.CatmullRomCurve3(reversed, false, "catmullrom", 0.4);
+  return new THREE.CatmullRomCurve3(reversed, false, "catmullrom", 0.5);
 }

@@ -4,6 +4,7 @@ import { cn } from "@/lib/cn";
 import type { Project } from "@/content/projects";
 import { projectStatusLabels } from "@/content/projects";
 import { TagList } from "./TagList";
+import { ProjectSigil } from "./ProjectSigil";
 
 interface ProjectCardProps {
   project: Project;
@@ -23,13 +24,18 @@ export function ProjectCard({
       <Link href={`/projects/${project.slug}`} className="group block h-full">
         <article
           className={cn(
-            "glow-card h-full rounded-2xl p-6",
-            isIndex &&
-              "relative overflow-hidden transition-all duration-500 group-hover:-translate-y-1",
+            "glow-card relative h-full rounded-2xl p-6 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1",
+            isIndex && "overflow-hidden",
           )}
         >
           {isIndex ? <ProjectCrystal slug={project.slug} /> : null}
           <div className="relative">
+            {!isIndex && (
+              <ProjectSigil
+                slug={project.slug}
+                className="h-12 w-auto mb-5 opacity-70 transition-opacity duration-300 group-hover:opacity-100"
+              />
+            )}
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span
                 className={cn(
@@ -41,16 +47,11 @@ export function ProjectCard({
               >
                 {isIndex ? project.domain : project.kicker}
               </span>
-              <span
-                className={cn(
-                  isIndex
-                    ? "font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]"
-                    : "font-display text-2xl text-[var(--accent)] leading-none",
-                )}
-                aria-hidden={!isIndex}
-              >
-                {isIndex ? project.context : project.glyph}
-              </span>
+              {isIndex && (
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--muted)]">
+                  {project.context}
+                </span>
+              )}
             </div>
             <h3 className="mt-3 font-display text-2xl leading-tight">
               {project.title}

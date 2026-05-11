@@ -5,6 +5,7 @@ import { NoteCard } from "@/components/content/NoteCard";
 import { ProjectCard } from "@/components/content/ProjectCard";
 import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
+import { TopoDivider } from "@/components/ui/TopoDivider";
 import { stations } from "@/content/stations";
 import { projects } from "@/content/projects";
 import { notes } from "@/content/notes";
@@ -17,6 +18,7 @@ export default function HomePage() {
       <Section
         kicker="Field manual"
         index="00"
+        pad="loose"
         title={
           <>
             A small atlas of mathematics,
@@ -58,6 +60,8 @@ export default function HomePage() {
         </ul>
       </Section>
 
+      <TopoDivider />
+
       <Section
         kicker="Selected work"
         index="IV"
@@ -80,9 +84,12 @@ export default function HomePage() {
         </div>
       </Section>
 
+      <TopoDivider flip />
+
       <Section
         kicker="Notes & Book"
         index="III"
+        pad="tight"
         title={<>Notes for carrying mathematics into software.</>}
         lede="Numerical methods, finite elements, optimization, stochastic modeling, linear algebra, and mathematical communication."
       >

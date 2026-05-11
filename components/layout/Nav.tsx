@@ -47,7 +47,7 @@ export function Nav() {
                     <Link
                       href={l.href}
                       className={cn(
-                        "relative inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors",
+                        "group/link relative inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors",
                         active
                           ? "text-[var(--fg)]"
                           : "text-[var(--fg-soft)] hover:text-[var(--accent)]",
@@ -61,8 +61,10 @@ export function Nav() {
                       )}
                       <span
                         className={cn(
-                          "font-mono text-[10px]",
-                          active ? "text-[var(--accent)]" : "opacity-60",
+                          "font-mono text-[10px] text-[var(--accent)] transition-opacity",
+                          active
+                            ? "opacity-100"
+                            : "opacity-0 group-hover/link:opacity-70",
                         )}
                       >
                         {l.glyph}

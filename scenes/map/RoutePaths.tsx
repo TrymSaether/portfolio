@@ -137,7 +137,7 @@ function ActivePath({ edges }: { edges: PathEdge[] }) {
         points,
         false,
         "catmullrom",
-        0.4,
+        0.5,
       );
       const tube = new THREE.TubeGeometry(dirCurve, 160, 0.024, 6, false);
       tubeRef.current.geometry.dispose();

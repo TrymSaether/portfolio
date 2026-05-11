@@ -9,7 +9,14 @@ interface SectionProps {
   className?: string;
   children?: ReactNode;
   align?: "left" | "center";
+  pad?: "tight" | "normal" | "loose";
 }
+
+const padding: Record<NonNullable<SectionProps["pad"]>, string> = {
+  tight: "py-12 sm:py-16",
+  normal: "py-20 sm:py-28",
+  loose: "py-28 sm:py-36",
+};
 
 export function Section({
   kicker,
@@ -19,12 +26,13 @@ export function Section({
   className,
   children,
   align = "left",
+  pad = "normal",
 }: SectionProps) {
   return (
     <section
       className={cn(
         "mx-auto max-w-7xl px-4 sm:px-6 lg:px-8",
-        "py-20 sm:py-28",
+        padding[pad],
         className,
       )}
     >

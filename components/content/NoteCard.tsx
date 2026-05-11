@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 import { cn } from "@/lib/cn";
 import { TagList } from "./TagList";
+import { Formula } from "./Formula";
 import type { Note } from "@/content/notes";
 
 interface NoteCardProps {
@@ -24,24 +25,21 @@ export function NoteCard({
           id={isIndex ? note.slug : undefined}
           className="glow-card h-full rounded-2xl p-6 group-hover:-translate-y-0.5 transition-transform duration-500"
         >
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <p
-              className={cn(
-                "font-mono text-[10px] tracking-[0.3em] uppercase",
-                isIndex ? "text-[var(--accent)]" : "text-[var(--muted)]",
-              )}
-            >
-              {note.kicker}
-            </p>
-            <p
-              className={cn(
-                "font-mono text-[10px] uppercase tracking-[0.18em]",
-                isIndex ? "text-[var(--muted)]" : "text-[var(--accent)]",
-              )}
-            >
-              {note.notation}
-            </p>
-          </div>
+          <Formula
+            tex={note.notation}
+            className={cn(
+              "note-formula block mb-5 text-[var(--accent)]",
+              isIndex ? "text-2xl" : "text-xl",
+            )}
+          />
+          <p
+            className={cn(
+              "font-mono text-[10px] tracking-[0.3em] uppercase",
+              isIndex ? "text-[var(--accent)]" : "text-[var(--muted)]",
+            )}
+          >
+            {note.kicker}
+          </p>
           <h3
             className={cn(
               "mt-3 font-display text-2xl leading-tight",
