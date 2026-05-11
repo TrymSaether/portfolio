@@ -81,13 +81,13 @@ export default function ContactPage() {
                 </p>
               </a>
               <a
-                href="/assets/documents/trym-saether-cv-tech-internships.pdf"
+                href="/assets/documents/trym-saether-cv.pdf"
                 className="glow-card rounded-2xl p-6 group"
               >
                 <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--muted)]">
                   Curriculum vitae
                 </p>
-                <p className="mt-3 font-display text-2xl">PDF, two pages</p>
+                <p className="mt-3 font-display text-2xl">Full CV, two pages</p>
                 <p className="mt-3 text-xs text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity">
                   Download ↘
                 </p>

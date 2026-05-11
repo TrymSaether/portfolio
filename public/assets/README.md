@@ -5,6 +5,8 @@ Files in this directory are served from `/assets/...` by Next.js.
 ## Structure
 
 - `documents/` - PDFs and other documents intended for download or direct linking.
+  - `trym-saether-cv.pdf` and `trym-saether-resume.pdf` are synced from the
+    `vendor/trym-saether-resume` submodule with `npm run resume:sync`.
   - `documents/old-portfolio/` - document assets imported from the previous portfolio.
 - `images/` - general raster images used across pages.
   - `images/personal/` - personal photographs imported from the previous portfolio.
@@ -20,5 +22,5 @@ Files in this directory are served from `/assets/...` by Next.js.
 Prefer lowercase, hyphenated filenames. Use stable public paths in code, for example:
 
 ```tsx
-<a href="/assets/documents/trym-saether-cv-tech-internships.pdf">CV</a>
+<a href="/assets/documents/trym-saether-cv.pdf">CV</a>
 ```

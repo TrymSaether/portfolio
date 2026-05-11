@@ -28,6 +28,8 @@ Visit [http://localhost:3000](http://localhost:3000)
 - `npm run build` — Production build
 - `npm run lint` — Lint check
 - `npm run typecheck` — TypeScript check
+- `npm run resume:sync` — Copy built resume PDFs from the resume submodule into public assets
+- `npm run resume:update` — Update the resume submodule, rebuild both CV variants, and sync the PDFs
 
 ## Adding Content
 
@@ -40,6 +42,13 @@ Visit [http://localhost:3000](http://localhost:3000)
 
 1. Update `content/projects.ts`
 2. Create `app/projects/[slug]/page.tsx`
+
+**Resume/CV:**
+
+The LaTeX source lives in the `vendor/trym-saether-resume` Git submodule. Keep
+that repository as the source of truth, then run `npm run resume:update` here to
+refresh `/assets/documents/trym-saether-cv.pdf` and
+`/assets/documents/trym-saether-resume.pdf`.
 
 ## Development
 

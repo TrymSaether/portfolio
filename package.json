@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "resume:sync": "cp vendor/trym-saether-resume/build/trym-saether-cv-full.pdf public/assets/documents/trym-saether-cv.pdf && cp vendor/trym-saether-resume/build/trym-saether-cv-compact.pdf public/assets/documents/trym-saether-resume.pdf",
+    "resume:update": "git submodule update --init --remote vendor/trym-saether-resume && make -C vendor/trym-saether-resume all && npm run resume:sync"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

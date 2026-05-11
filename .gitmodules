@@ -1,0 +1,4 @@
+[submodule "vendor/trym-saether-resume"]
+	path = vendor/trym-saether-resume
+	url = https://github.com/TrymSaether/trym-saether-resume.git
+	branch = main
