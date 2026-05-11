@@ -19,7 +19,6 @@ export default function AppleIcon() {
           fontWeight: 600,
           fontFamily: "Georgia, serif",
           letterSpacing: "-0.04em",
-          borderRadius: 36,
         }}
       >
         T

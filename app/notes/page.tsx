@@ -53,6 +53,7 @@ export default function NotesPage() {
                       <svg
                         viewBox="0 0 200 50"
                         className="w-full h-12 stroke-[#1c1a14] fill-none opacity-70"
+                        aria-hidden
                       >
                         <path d="M0 40 C 30 10, 60 10, 100 25 S 170 40, 200 10" />
                         {[6, 30, 70, 110, 145, 175, 192].map((x) => (
