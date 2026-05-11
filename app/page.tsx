@@ -116,10 +116,10 @@ export default function HomePage() {
             <span aria-hidden>→</span>
           </Link>
           <a
-            href="mailto:hei@trymsaether.no"
+            href="mailto:saether.trym@gmail.com"
             className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm border border-[var(--line)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
           >
-            hei@trymsaether.no
+            saether.trym@gmail.com
           </a>
         </div>
       </Section>

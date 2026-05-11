@@ -50,8 +50,8 @@ export function Footer() {
           </p>
           <ul className="mt-4 space-y-2 text-sm">
             <li>
-              <a className="hover:text-[var(--accent)]" href="mailto:hei@trymsaether.no">
-                hei@trymsaether.no
+              <a className="hover:text-[var(--accent)]" href="mailto:saether.trym@gmail.com">
+                saether.trym@gmail.com
               </a>
             </li>
             <li>

@@ -43,7 +43,7 @@ export default function ContactPage() {
           <Reveal delay={0.1}>
             <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl">
               <a
-                href="mailto:hei@trymsaether.no"
+                href="mailto:saether.trym@gmail.com"
                 className="glow-card relative rounded-2xl p-6 group md:col-span-2 border border-[var(--accent)]/30 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--accent)]/50"
               >
                 <Mail className="absolute right-6 top-6 size-5 text-[var(--accent)] opacity-70 transition-opacity group-hover:opacity-100" />
@@ -53,7 +53,7 @@ export default function ContactPage() {
                 </p>
 
                 <p className="mt-3 font-display text-2xl sm:text-3xl break-words">
-                  hei@trymsaether.no
+                  saether.trym@gmail.com
                 </p>
 
                 <p className="mt-3 text-xs text-[var(--accent)] opacity-60 transition-opacity group-hover:opacity-100">

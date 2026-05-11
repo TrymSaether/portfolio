@@ -149,6 +149,11 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
             glow={sceneColors["--scene-glow"] || "#f3c66b"}
             vignette={parseFloat(sceneColors["--scene-vignette"] || "0.45")}
           />
+          <Ocean
+            deep={isLight ? "#bcb19a" : "#04080f"}
+            shallow={isLight ? "#d9cdb1" : "#0c1a2a"}
+            highlight={sceneColors["--scene-glow"] || "#f3c66b"}
+          />
           <RoutePaths />
           <Stations
             hovered={hovered}
