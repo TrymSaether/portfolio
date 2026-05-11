@@ -66,13 +66,14 @@ function StationMarker({
     () => stationWorldPos(station.position, station.elevationOffset),
     [station.position, station.elevationOffset],
   );
+  const isEngaged = isHovered || isActive;
 
   useFrame((state, dt) => {
     if (!groupRef.current) return;
     const t = state.clock.elapsedTime;
 
     // Hover scale
-    const targetScale = isHovered || isActive ? 1.08 : 1.0;
+    const targetScale = isEngaged ? 1.08 : 1.0;
     groupRef.current.scale.lerp(
       new THREE.Vector3(targetScale, targetScale, targetScale),
       0.12,
@@ -144,6 +145,58 @@ function StationMarker({
         onSelect(station.id);
       }}
     >
+      {/* Generous invisible target. The visible station is intentionally fine-lined,
+          so this catches clicks on the readable station footprint instead. */}
+      <mesh position={[0, 0.52, 0]}>
+        <cylinderGeometry args={[0.72, 0.72, 1.45, 32]} />
+        <meshBasicMaterial
+          color={accent}
+          transparent
+          opacity={0}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </mesh>
+
+      {/* Clickable station pad / frame */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.0015, 0]}>
+        <circleGeometry args={[0.62, 64]} />
+        <meshBasicMaterial
+          color={accent}
+          transparent
+          opacity={isEngaged ? 0.12 : 0.045}
+          toneMapped={false}
+          side={THREE.DoubleSide}
+          depthWrite={false}
+        />
+      </mesh>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]}>
+        <ringGeometry args={[0.54, 0.62, 64]} />
+        <meshBasicMaterial
+          color={accent}
+          transparent
+          opacity={isEngaged ? 0.85 : 0.38}
+          toneMapped={false}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+      {[
+        { key: "n", position: [0, 0.004, 0.58], args: [0.2, 0.008, 0.018] },
+        { key: "s", position: [0, 0.004, -0.58], args: [0.2, 0.008, 0.018] },
+        { key: "e", position: [0.58, 0.004, 0], args: [0.018, 0.008, 0.2] },
+        { key: "w", position: [-0.58, 0.004, 0], args: [0.018, 0.008, 0.2] },
+      ].map((tick) => (
+        <mesh key={tick.key} position={tick.position as [number, number, number]}>
+          <boxGeometry args={tick.args as [number, number, number]} />
+          <meshBasicMaterial
+            color={accent}
+            transparent
+            opacity={isEngaged ? 0.95 : 0.5}
+            toneMapped={false}
+          />
+        </mesh>
+      ))}
+
       {/* Inner glowing ring */}
       <mesh
         ref={ringRef}

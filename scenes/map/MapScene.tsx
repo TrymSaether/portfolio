@@ -84,7 +84,10 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
 
     const cur = useSceneStore.getState();
     if (cur.mode !== "parked") return; // ignore further clicks mid-flight
-    if (targetIndex === cur.parkedStationIndex) return; // already there
+    if (targetIndex === cur.parkedStationIndex) {
+      router.push(stations[targetIndex].href);
+      return;
+    }
 
     cur.beginFly(targetIndex, performance.now() / 1000);
   };
