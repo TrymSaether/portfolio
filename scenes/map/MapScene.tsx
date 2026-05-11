@@ -173,11 +173,11 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
 
       {/* Cinematic frame overlay */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--muted)]">
+        <div className="absolute top-16 left-4 sm:top-20 sm:left-6 font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--muted)]">
           <p>Atlas / sheet 01</p>
           <p className="mt-1 text-[var(--accent)]">Trondheim · 63°25′N 10°24′E</p>
         </div>
-        <div className="absolute top-4 right-4 sm:top-6 sm:right-6 font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--muted)] text-right">
+        <div className="absolute top-16 right-4 sm:top-20 sm:right-6 font-mono text-[10px] uppercase tracking-[0.28em] text-[var(--muted)] text-right">
           <p>{stations.length} stations</p>
           <RoverStatus />
         </div>

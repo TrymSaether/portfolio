@@ -56,6 +56,7 @@
   --fg: var(--color-ink-100);
   --fg-strong: #ffffff;
   --fg-soft: var(--color-ink-200);
+  --text: var(--color-ink-200);
   --muted: var(--color-ink-300);
   --line: color-mix(in oklab, var(--color-ink-400) 40%, transparent);
   --line-strong: color-mix(in oklab, var(--color-ink-300) 60%, transparent);
@@ -126,6 +127,7 @@
   --fg: #1c1a14;
   --fg-strong: #0d0c08;
   --fg-soft: #3a352a;
+  --text: #3a352a;
   --muted: #6e6552;
   --line: rgba(28, 26, 20, 0.14);
   --line-strong: rgba(28, 26, 20, 0.28);
@@ -383,6 +385,42 @@ body {
     color-mix(in oklab, var(--bg) 92%, transparent)
   );
   z-index: 1;
+}
+
+/* Left-side scrim — keeps hero copy legible over the busy map */
+.scrim-left::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 60%;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    color-mix(in oklab, var(--bg) 78%, transparent) 0%,
+    color-mix(in oklab, var(--bg) 55%, transparent) 35%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+@media (min-width: 1280px) {
+  .scrim-left::before {
+    width: 45%;
+  }
+}
+
+/* Top scrim — separates fixed nav from busy hero content */
+.scrim-top::after {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 96px;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--bg) 75%, transparent),
+    transparent
+  );
+  z-index: 30;
 }
 
 @keyframes scroll-cue {

@@ -61,7 +61,7 @@ export function Section({
       {lede && (
         <p
           className={cn(
-            "mt-6 max-w-2xl text-lg text-[var(--muted)]",
+            "mt-6 max-w-2xl text-lg text-[var(--text)]",
             align === "center" && "mx-auto text-center",
           )}
         >

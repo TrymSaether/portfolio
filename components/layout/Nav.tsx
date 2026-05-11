@@ -49,20 +49,25 @@ export function Nav() {
                       className={cn(
                         "relative inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition-colors",
                         active
-                          ? "text-[var(--on-accent)]"
+                          ? "text-[var(--fg)]"
                           : "text-[var(--fg-soft)] hover:text-[var(--accent)]",
                       )}
                     >
                       {active && (
                         <span
                           aria-hidden
-                          className="absolute inset-0 z-0 rounded-full bg-[var(--accent)]"
+                          className="absolute left-3 right-3 bottom-1 h-px bg-[var(--accent)]"
                         />
                       )}
-                      <span className="relative z-10 font-mono text-[10px] opacity-60">
+                      <span
+                        className={cn(
+                          "font-mono text-[10px]",
+                          active ? "text-[var(--accent)]" : "opacity-60",
+                        )}
+                      >
                         {l.glyph}
                       </span>
-                      <span className="relative z-10">{l.label}</span>
+                      <span>{l.label}</span>
                     </Link>
                   </li>
                 );

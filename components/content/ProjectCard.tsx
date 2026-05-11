@@ -63,7 +63,7 @@ export function ProjectCard({
             <p
               className={cn(
                 "mt-2 text-sm leading-relaxed",
-                isIndex ? "mt-4 text-[var(--fg-soft)]" : "text-[var(--muted)]",
+                isIndex ? "mt-4 text-[var(--fg-soft)]" : "text-[var(--text)]",
               )}
             >
               {project.blurb}

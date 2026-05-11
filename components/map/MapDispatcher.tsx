@@ -58,7 +58,7 @@ export function MapDispatcher({ desktopOverlay }: { desktopOverlay: React.ReactN
   }
 
   return (
-    <section className="relative h-[100dvh] overflow-hidden grain scrim-bottom">
+    <section className="relative h-[100dvh] overflow-hidden grain scrim-bottom scrim-left scrim-top">
       <MapScene />
       {desktopOverlay}
     </section>

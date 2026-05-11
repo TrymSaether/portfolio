@@ -55,7 +55,7 @@ export function NoteCard({
               "leading-relaxed max-w-prose",
               isIndex
                 ? "mt-3 text-base text-[var(--fg-soft)]"
-                : "mt-2 text-sm text-[var(--muted)]",
+                : "mt-2 text-sm text-[var(--text)]",
             )}
           >
             {note.excerpt}

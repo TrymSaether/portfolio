@@ -21,10 +21,7 @@ export default function HomePage() {
           <>
             A small atlas of mathematics,
             <br className="hidden lg:block" /> software, and the tools they
-            <span className="font-display-italic text-[var(--accent)]">
-              {" "}
-              produce.
-            </span>
+            produce.
           </>
         }
         lede="Six stations through numerical methods, simulation software, compiler-adjacent tooling, notes, and contact."
@@ -33,8 +30,14 @@ export default function HomePage() {
           {stations.map((s, i) => (
             <Reveal key={s.id} delay={i * 0.05} as="li">
               <Link href={s.href} className="group block h-full">
-                <article className="glow-card h-full rounded-2xl p-6 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1">
-                  <div className="flex items-baseline justify-between">
+                <article className="glow-card relative h-full rounded-2xl p-6 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1">
+                  <span
+                    aria-hidden
+                    className="absolute top-5 right-5 font-mono text-base text-[var(--muted)] transition-all duration-300 group-hover:text-[var(--accent)] group-hover:translate-x-0.5"
+                  >
+                    ↗
+                  </span>
+                  <div className="flex items-baseline justify-between pr-7">
                     <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--accent)]">
                       {s.glyph} · {s.subtitle}
                     </span>
@@ -45,11 +48,8 @@ export default function HomePage() {
                   <h3 className="mt-3 font-display text-3xl leading-tight">
                     {s.label}
                   </h3>
-                  <p className="mt-3 text-sm text-[var(--muted)] leading-relaxed">
+                  <p className="mt-3 text-sm text-[var(--text)] leading-relaxed">
                     {s.oneLiner}
-                  </p>
-                  <p className="mt-6 text-xs text-[var(--accent)] flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                    Enter station <span aria-hidden>→</span>
                   </p>
                 </article>
               </Link>
@@ -96,15 +96,7 @@ export default function HomePage() {
       <Section
         kicker="Open channel"
         index="VI"
-        title={
-          <>
-            Send a signal across the
-            <span className="font-display-italic text-[var(--accent)]">
-              {" "}
-              valley.
-            </span>
-          </>
-        }
+        title={<>Send a signal across the valley.</>}
         lede="For conversations about simulation software, scientific computing, compiler/tooling work, EDA-related systems, or mathematical communication."
         align="center"
       >
