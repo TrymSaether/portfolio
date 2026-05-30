@@ -60,7 +60,27 @@ refresh `/assets/documents/trym-saether-cv.pdf` and
 
 ## Deployment
 
-Deployed on Vercel (Frankfurt region). See `vercel.json` for config.
+This site is configured for static export and can be published as the GitHub
+Pages user site at [https://trymsaether.github.io/](https://trymsaether.github.io/).
+
+```bash
+npm run build
+```
+
+The deployable artifact is `out/`. It includes `.nojekyll`, static assets, and
+root-relative links for the user-site domain.
+
+To replace the old `TrymSaether/trymsaether.github.io` site cleanly:
+
+1. Build this portfolio repository.
+2. In a separate checkout of `TrymSaether/trymsaether.github.io`, remove the old
+   published files while preserving `.git/`.
+3. Copy the contents of this repository's `out/` directory into that checkout.
+4. Commit and push the replacement in `TrymSaether/trymsaether.github.io`.
+
+Math Atlas should remain a separate GitHub Pages project site at
+`https://trymsaether.github.io/math-atlas/`; the portfolio links to it as
+`/math-atlas/`.
 
 ## License
 

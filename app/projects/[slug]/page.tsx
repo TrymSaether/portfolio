@@ -89,19 +89,24 @@ export default async function ProjectPage({
                 Links
               </p>
               <ul className="mt-3 space-y-2">
-                {project.links.map((link) => (
-                  <li key={link.href}>
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 text-sm text-[var(--accent)] hover:text-[var(--accent-strong)]"
-                    >
-                      {link.label}
-                      <span aria-hidden>↗</span>
-                    </a>
-                  </li>
-                ))}
+                {project.links.map((link) => {
+                  const isExternal = /^https?:\/\//.test(link.href);
+                  const className =
+                    "inline-flex items-center gap-2 text-sm text-[var(--accent)] hover:text-[var(--accent-strong)]";
+                  return (
+                    <li key={link.href}>
+                      <a
+                        href={link.href}
+                        target={isExternal ? "_blank" : undefined}
+                        rel={isExternal ? "noreferrer" : undefined}
+                        className={className}
+                      >
+                        {link.label}
+                        <span aria-hidden>{isExternal ? "↗" : "→"}</span>
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ) : null}

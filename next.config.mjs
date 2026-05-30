@@ -6,8 +6,13 @@ import rehypePrettyCode from "rehype-pretty-code";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  output: "export",
   transpilePackages: ["three"],
   pageExtensions: ["ts", "tsx", "mdx"],
+  trailingSlash: true,
+  images: {
+    unoptimized: true,
+  },
 };
 
 const withMDX = createMDX({

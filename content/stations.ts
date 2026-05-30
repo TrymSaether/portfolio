@@ -96,7 +96,7 @@ export const stations: Station[] = [
     href: "/projects",
     glyph: "IV",
     oneLiner:
-      "AFEM, VAMSC, ForDAE, particle transport, and other technical artifacts.",
+      "Math Atlas, AFEM, VAMSC, particle transport, and other technical artifacts.",
     palette: stationColors.gold,
   },
   {

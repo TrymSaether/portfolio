@@ -5,7 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://trymsaether.no"),
+  metadataBase: new URL("https://trymsaether.github.io"),
   title: {
     default: "Trym Sæther — Mathematics into software.",
     template: "%s · Trym Sæther",

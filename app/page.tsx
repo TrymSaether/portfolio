@@ -66,7 +66,7 @@ export default function HomePage() {
         kicker="Selected work"
         index="IV"
         title={<>Technical artifacts with mathematical structure.</>}
-        lede="Simulation prototypes, classifiers, optical-flow solvers, finite element work, particle transport, and image-processing code that make the reasoning inspectable."
+        lede="Math Atlas, simulation prototypes, classifiers, optical-flow solvers, finite element work, particle transport, and image-processing code that make the reasoning inspectable."
       >
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {projects.slice(0, 3).map((p, i) => (

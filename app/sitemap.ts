@@ -3,7 +3,9 @@ import { stations } from "@/content/stations";
 import { projects } from "@/content/projects";
 import { notes } from "@/content/notes";
 
-const BASE = "https://trymsaether.no";
+const BASE = "https://trymsaether.github.io";
+
+export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

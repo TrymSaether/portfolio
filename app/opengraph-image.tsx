@@ -3,6 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "Trym Sæther — Mathematics into software.";
+export const dynamic = "force-static";
 
 export default function OGImage() {
   return new ImageResponse(
@@ -106,7 +107,7 @@ export default function OGImage() {
             }}
           >
             <span>Trondheim · 63°25′N</span>
-            <span style={{ color: "#a7b3cd" }}>trymsaether.no</span>
+            <span style={{ color: "#a7b3cd" }}>trymsaether.github.io</span>
           </div>
         </div>
       </div>

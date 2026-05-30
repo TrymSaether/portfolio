@@ -40,6 +40,32 @@ export function getProjectBySlug(slug: string) {
 
 export const projects: Project[] = [
   {
+    slug: "math-atlas",
+    title: "Math Atlas",
+    kicker: "Topology Map · Mathematical Reference",
+    context: "Public project site",
+    blurb:
+      "A browsable topology atlas that organizes definitions, theorems, examples, and dependency structure as a static project site.",
+    longBlurb:
+      "Math Atlas is a project site for mathematical navigation: topology content represented as connected nodes, with statements, explanations, examples, and dependencies arranged so the structure can be inspected directly.",
+    impact:
+      "The site turns mathematical notes into an explorable reference. It is prepared as a GitHub Pages project under the portfolio domain, so it can live at /math-atlas/ beside the main site.",
+    stack: ["Next.js", "Topology", "Static export", "GitHub Pages"],
+    domain: "Numerical Mathematics",
+    status: "public",
+    glyph: "△",
+    links: [
+      {
+        label: "Project site",
+        href: "/math-atlas/",
+      },
+      {
+        label: "Repository",
+        href: "https://github.com/TrymSaether/math-atlas",
+      },
+    ],
+  },
+  {
     slug: "vamsc",
     title: "VAMSC",
     kicker: "Mixed-Signal Simulation · Systems Modeling",
