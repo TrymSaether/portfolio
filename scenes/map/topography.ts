@@ -5,6 +5,20 @@ export const TERRAIN_SIZE = 22;
 export const TERRAIN_SEGMENTS = 256;
 export const TERRAIN_HEIGHT = 2.4;
 export const DEFAULT_STATION_ELEVATION_OFFSET = 0.04;
+/** Y at which the ocean surface sits — keep in sync with Ocean.tsx. */
+export const OCEAN_LEVEL = -0.55;
+/** Minimum height above sea that path knots must clear to count as "on land". */
+const LAND_MARGIN = 0.08;
+
+/**
+ * Designated bridge edge — the rover crosses water here instead of detouring.
+ * All other edges have their underwater knots pushed onto land.
+ */
+export const BRIDGE_EDGE: [number, number] = [2, 4]; // Notes (idx 2) ↔ Personal (idx 4)
+export function isBridgeEdge(a: number, b: number): boolean {
+  const [lo, hi] = a < b ? [a, b] : [b, a];
+  return lo === BRIDGE_EDGE[0] && hi === BRIDGE_EDGE[1];
+}
 
 /**
  * Procedural elevation evaluated on the CPU so rover/stations/paths can sit on
@@ -137,9 +151,33 @@ export function terrainNormal(x: number, z: number): THREE.Vector3 {
 }
 
 /**
+ * Push a point radially outward from the island center until it sits on land
+ * (terrain elevation above OCEAN_LEVEL + LAND_MARGIN). Returns the original
+ * point if it's already above water. Caps the search at 2.5× original radius.
+ */
+function pushToLand(x: number, z: number): { x: number; z: number } {
+  if (elevation(x, z) > OCEAN_LEVEL + LAND_MARGIN) return { x, z };
+  const r = Math.hypot(x, z);
+  if (r < 1e-4) return { x, z };
+  let scale = 1;
+  for (let i = 0; i < 18; i++) {
+    scale *= 1.07;
+    const nx = x * scale;
+    const nz = z * scale;
+    if (elevation(nx, nz) > OCEAN_LEVEL + LAND_MARGIN) return { x: nx, z: nz };
+    if (scale > 2.5) break;
+  }
+  return { x: x * scale, z: z * scale };
+}
+
+/**
  * Build a terrain-hugging Catmull-Rom path from one station's parking spot
  * to another's. Samples elevation along the (x,z) line and adds a small
  * perpendicular bow so the path doesn't read as a straight line on the map.
+ *
+ * Knots that fall over water are pushed radially outward toward land so the
+ * rover can drive around the central valley — except on the designated
+ * BRIDGE_EDGE, where the straight crossing is preserved.
  */
 export function buildPath(
   fromIndex: number,
@@ -171,13 +209,25 @@ export function buildPath(
     stations[toIndex].elevationOffset ?? DEFAULT_STATION_ELEVATION_OFFSET;
   const MIN_CLEARANCE = 0.22;
 
+  const bridge = isBridgeEdge(fromIndex, toIndex);
+
   const pts: THREE.Vector3[] = [];
   for (let i = 0; i <= N; i++) {
     const u = i / N;
     // Smooth s-curve weight: 0 at endpoints, 1 in the middle
     const w = Math.sin(u * Math.PI);
-    const x = a.x + dx * u + px * bow * w;
-    const z = a.z + dz * u + pz * bow * w;
+    let x = a.x + dx * u + px * bow * w;
+    let z = a.z + dz * u + pz * bow * w;
+
+    // On non-bridge edges, route around water: push underwater knots radially
+    // outward until they sit on land. Keep endpoints anchored at their
+    // parking spots so the path actually reaches the stations.
+    const isEndpoint = i === 0 || i === N;
+    if (!bridge && !isEndpoint) {
+      const projected = pushToLand(x, z);
+      x = projected.x;
+      z = projected.z;
+    }
 
     // Decay each endpoint's extra lift over the first/last 30% of the path so
     // the descent from elevated stations clears nearby terrain.
@@ -192,9 +242,13 @@ export function buildPath(
     );
     const clearance = Math.max(MIN_CLEARANCE, endpointLift);
 
-    // Wider local-max footprint catches neighbourhood peaks the spline could
-    // otherwise interpolate through.
-    const y = maxElevationLocal(x, z, 0.32, 2, 8) + clearance;
+    let y: number;
+    if (bridge && !isEndpoint) {
+      // Bridge knots sit at a fixed deck height above the water surface.
+      y = OCEAN_LEVEL + 0.32;
+    } else {
+      y = maxElevationLocal(x, z, 0.32, 2, 8) + clearance;
+    }
     pts.push(new THREE.Vector3(x, y, z));
   }
   // Centripetal Catmull-Rom (alpha = 0.5) prevents overshoot between samples,

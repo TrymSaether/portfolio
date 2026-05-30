@@ -68,21 +68,37 @@ const fragmentShader = /* glsl */ `
     float shore = smoothstep(uIslandRadius * 0.9, uIslandRadius * 1.6, r);
     vec3 base = mix(uShallow, uDeep, shore);
 
-    // Specular-ish shimmer where waves peak, biased toward the camera
-    float crest = smoothstep(0.55, 0.85, waves);
+    // Wave shimmer; suppressed in the deep water (far from island) so the
+    // border reads as quiet, abyssal sea.
+    float waveMask = 1.0 - smoothstep(uIslandRadius * 1.4, uIslandRadius * 2.2, r);
+    float crest = smoothstep(0.55, 0.85, waves) * waveMask;
     base += uHighlight * crest * (0.18 + 0.12 * (1.0 - shore));
 
-    // Subtle gold streaks pointing along an arbitrary "current" direction
+    // Subtle gold streaks — same restriction
     float streak = sin(p.x * 0.35 + uTime * 0.08) * 0.5 + 0.5;
-    streak *= smoothstep(0.4, 0.7, waves);
+    streak *= smoothstep(0.4, 0.7, waves) * waveMask;
     base += uHighlight * streak * 0.06;
 
-    // Soft contour rings at the underwater shelf — depth bands
-    float band = fract(r * 0.7 - uTime * 0.04);
-    float ring = smoothstep(0.96, 0.98, band) - smoothstep(0.98, 1.0, band);
-    base += uHighlight * ring * 0.18 * (1.0 - shore);
+    // Concentric bathymetric depth bands — radiate outward from the island,
+    // brightest near the coastal shelf and fading as we go deeper.
+    float band = fract(r * 0.55 - uTime * 0.025);
+    float ring = smoothstep(0.93, 0.97, band) - smoothstep(0.97, 1.0, band);
+    float ringMask = waveMask * (1.0 - smoothstep(uIslandRadius, uIslandRadius * 2.4, r));
+    base += uHighlight * ring * 0.22 * ringMask;
 
-    // Horizon vignette — fade water to scene fog at the edges
+    // Coastal glow — soft warm halo right at the island's edge to suggest a
+    // bright atmospheric rim where land meets sea.
+    float coastal = smoothstep(uIslandRadius * 1.05, uIslandRadius * 0.92, r) *
+                    smoothstep(uIslandRadius * 0.72, uIslandRadius * 0.92, r);
+    base += uHighlight * coastal * 0.45;
+
+    // Far-water deepening — exponentially darken beyond ~2× island radius so
+    // the horizon swims into the scene fog instead of presenting as a flat
+    // plane that meets a hard sky line.
+    float depth = smoothstep(uIslandRadius * 1.6, uIslandRadius * 3.5, r);
+    base = mix(base, uDeep * 0.35, depth);
+
+    // Horizon vignette — last fade into the fog.
     float v = smoothstep(uIslandRadius * 4.5, uIslandRadius * 2.0, r);
     base *= mix(uVignette, 1.0, v);
 

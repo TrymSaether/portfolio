@@ -71,6 +71,7 @@ const fragmentShader = /* glsl */ `
   uniform float uContourSpacing;
   uniform float uSize;
   uniform float uVignette;
+  uniform float uOceanLevel;
 
   varying vec2  vUv;
   varying float vElevation;
@@ -125,6 +126,13 @@ const fragmentShader = /* glsl */ `
     float rim = smoothstep(0.65, 0.95, t);
     base += uGlow * rim * 0.35;
 
+    // Shoreline glow — warm band where terrain is just above the water line
+    float aboveSea = vElevation - uOceanLevel;
+    float shore =
+      smoothstep(0.0, 0.04, aboveSea) *
+      (1.0 - smoothstep(0.04, 0.22, aboveSea));
+    base += uGlow * shore * 0.55;
+
     // Distance fog vignette toward edges
     float vignette = smoothstep(1.05, 0.55, r);
     base *= mix(uVignette, 1.0, vignette);
@@ -143,6 +151,7 @@ interface Props {
   contour?: string;
   glow?: string;
   vignette?: number;
+  oceanLevel?: number;
 }
 
 export function Terrain({
@@ -151,6 +160,7 @@ export function Terrain({
   contour = "#a7b3cd",
   glow = "#f3c66b",
   vignette = 0.45,
+  oceanLevel = -0.55,
 }: Props) {
   const matRef = useRef<THREE.ShaderMaterial>(null);
 
@@ -161,6 +171,7 @@ export function Terrain({
       uSize: { value: TERRAIN_SIZE },
       uContourSpacing: { value: 0.18 },
       uVignette: { value: vignette },
+      uOceanLevel: { value: oceanLevel },
       uLow: { value: new THREE.Color(inkLow) },
       uHigh: { value: new THREE.Color(inkHigh) },
       uContour: { value: new THREE.Color(contour) },
@@ -178,7 +189,8 @@ export function Terrain({
     u.uContour.value.set(contour);
     u.uGlow.value.set(glow);
     u.uVignette.value = vignette;
-  }, [inkLow, inkHigh, contour, glow, vignette]);
+    u.uOceanLevel.value = oceanLevel;
+  }, [inkLow, inkHigh, contour, glow, vignette, oceanLevel]);
 
   useFrame((_, dt) => {
     if (matRef.current) {

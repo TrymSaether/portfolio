@@ -11,6 +11,8 @@ import {
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import * as THREE from "three";
 import { Terrain } from "./Terrain";
+import { Ocean, OCEAN_LEVEL } from "./Ocean";
+import { Bridge } from "./Bridge";
 import { Stations } from "./Stations";
 import { Rover } from "./Rover";
 import { Atmosphere } from "./Atmosphere";
@@ -148,12 +150,14 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
             contour={sceneColors["--scene-contour"] || "#a7b3cd"}
             glow={sceneColors["--scene-glow"] || "#f3c66b"}
             vignette={parseFloat(sceneColors["--scene-vignette"] || "0.45")}
+            oceanLevel={OCEAN_LEVEL}
           />
           <Ocean
             deep={isLight ? "#bcb19a" : "#04080f"}
             shallow={isLight ? "#d9cdb1" : "#0c1a2a"}
             highlight={sceneColors["--scene-glow"] || "#f3c66b"}
           />
+          <Bridge />
           <RoutePaths />
           <Stations
             hovered={hovered}
@@ -190,6 +194,12 @@ export function MapScene({ onHoverStation }: MapSceneProps = {}) {
         <Crosshair className="top-2 right-2" rotate={90} />
         <Crosshair className="bottom-2 left-2" rotate={-90} />
         <Crosshair className="bottom-2 right-2" rotate={180} />
+
+        {/* Compass rose (bottom-right of map) */}
+        <CompassRose className="hidden sm:block absolute bottom-20 right-6" />
+
+        {/* Scale bar (bottom-left, atlas-style) */}
+        <ScaleBar className="hidden sm:block absolute bottom-20 left-6" />
       </div>
 
       {/* Mobile/tablet station info popover (bottom-center, hidden ≥ xl) */}
@@ -363,5 +373,82 @@ function Crosshair({
       <path d="M2 2 L2 8" />
       <path d="M2 2 L8 2" />
     </svg>
+  );
+}
+
+function CompassRose({ className = "" }: { className?: string }) {
+  return (
+    <div className={className}>
+      <svg
+        width="68"
+        height="68"
+        viewBox="0 0 68 68"
+        className="opacity-70"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="0.75"
+        color="var(--accent)"
+        aria-hidden
+      >
+        <circle cx="34" cy="34" r="28" opacity="0.35" />
+        <circle cx="34" cy="34" r="22" opacity="0.55" />
+        <circle cx="34" cy="34" r="2.5" fill="currentColor" stroke="none" />
+        {/* Cardinal needle (N–S, accent-filled north) */}
+        <polygon
+          points="34,4 30,34 38,34"
+          fill="currentColor"
+          stroke="none"
+          opacity="0.9"
+        />
+        <polygon
+          points="34,64 30,34 38,34"
+          fill="currentColor"
+          stroke="none"
+          opacity="0.35"
+        />
+        {/* Inter-cardinal ticks */}
+        <line x1="34" y1="6" x2="34" y2="12" />
+        <line x1="34" y1="56" x2="34" y2="62" />
+        <line x1="6" y1="34" x2="12" y2="34" />
+        <line x1="56" y1="34" x2="62" y2="34" />
+        <line x1="14" y1="14" x2="18" y2="18" opacity="0.5" />
+        <line x1="54" y1="14" x2="50" y2="18" opacity="0.5" />
+        <line x1="14" y1="54" x2="18" y2="50" opacity="0.5" />
+        <line x1="54" y1="54" x2="50" y2="50" opacity="0.5" />
+      </svg>
+      <p className="mt-1 text-center font-mono text-[9px] tracking-[0.32em] uppercase text-[var(--accent)]/80">
+        N
+      </p>
+    </div>
+  );
+}
+
+function ScaleBar({ className = "" }: { className?: string }) {
+  return (
+    <div className={`font-mono text-[9px] uppercase tracking-[0.28em] text-[var(--muted)] ${className}`}>
+      <svg
+        width="120"
+        height="14"
+        viewBox="0 0 120 14"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="0.9"
+        color="var(--accent)"
+        className="opacity-70"
+        aria-hidden
+      >
+        <line x1="0" y1="9" x2="120" y2="9" />
+        <line x1="0" y1="4" x2="0" y2="14" />
+        <line x1="30" y1="6" x2="30" y2="12" opacity="0.6" />
+        <line x1="60" y1="4" x2="60" y2="14" />
+        <line x1="90" y1="6" x2="90" y2="12" opacity="0.6" />
+        <line x1="120" y1="4" x2="120" y2="14" />
+      </svg>
+      <div className="mt-1 flex justify-between w-[120px]">
+        <span>0</span>
+        <span className="text-[var(--accent)]/80">1 ∞</span>
+        <span>2</span>
+      </div>
+    </div>
   );
 }
